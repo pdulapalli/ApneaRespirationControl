@@ -20,7 +20,7 @@ extern "C" {
 #include <delays.h>
 
 #include "Lcd.h"
-#include "DataWindow.h"
+#include "DataManager.h"
 
 #define APNEA_THRESHOLD_PERCENT 70
 #define REQ_APNEA_ONSET_DURATION 2 //time required before declaring apnea condition

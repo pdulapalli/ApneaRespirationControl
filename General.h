@@ -58,6 +58,9 @@
 #define READ  	1                           ///< Allow READ to equal 1.
 #define WRITE	0							///< Allow WRITE to equal 0.
 
+#define INPUT 1
+#define OUTPUT 0
+
 typedef unsigned char UINT8_T;				///< UINT8_T means unsigned Char (8-bit)	
 typedef unsigned int  UINT16_T;				///< UINT16_T means unsigned Int (16-bit)
 typedef unsigned char BOOL;					///< BOOL means unsigned Char (8-bit)

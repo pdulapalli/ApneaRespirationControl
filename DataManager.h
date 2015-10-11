@@ -1,13 +1,13 @@
 /*
- * File:   DataWindow.h
+ * File:   DataManager.h
  * Author: Praveenanurag Dulapalli
  *
  * Created: 09/27/2015
  * Last Modified: 09/27/2015
  */
 
-#ifndef DATAWINDOW_H
-#define	DATAWINDOW_H
+#ifndef DATAMANAGER_H
+#define	DATAMANAGER_H
 
 #ifdef	__cplusplus
 extern "C" {
@@ -23,6 +23,8 @@ extern "C" {
 
 #define WINDOW_DURATION 10
 #define SAMPLES_PER_SECOND 2
+#define DATA_BITS_LENGTH 10 //Full resolution, left-justified 0.5 g measurement
+                            //LSB will always be 0
 
 typedef struct {
     int value; //Contains the data 'packet' at this instant

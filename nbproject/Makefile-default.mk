@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=
+SOURCEFILES_QUOTED_IF_SPACED="/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/main.c" "/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SerialSPI.c" "/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ADXL313.c"
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=
-POSSIBLE_DEPFILES=
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/113122966/main.o ${OBJECTDIR}/_ext/113122966/SerialSPI.o ${OBJECTDIR}/_ext/113122966/ADXL313.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/113122966/main.o.d ${OBJECTDIR}/_ext/113122966/SerialSPI.o.d ${OBJECTDIR}/_ext/113122966/ADXL313.o.d
 
 # Object Files
-OBJECTFILES=
+OBJECTFILES=${OBJECTDIR}/_ext/113122966/main.o ${OBJECTDIR}/_ext/113122966/SerialSPI.o ${OBJECTDIR}/_ext/113122966/ADXL313.o
 
 # Source Files
-SOURCEFILES=
+SOURCEFILES=/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/main.c /Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SerialSPI.c /Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ADXL313.c
 
 
 CFLAGS=
@@ -89,7 +89,55 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
+${OBJECTDIR}/_ext/113122966/main.o: /Users/pdulapalli/Documents/Duke/Fall\ 2015/BME\ 464/Project/Apnea\ Respiration\ Control/ApneaRespirationControl-Software/main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/113122966" 
+	@${RM} ${OBJECTDIR}/_ext/113122966/main.o.d 
+	@${RM} ${OBJECTDIR}/_ext/113122966/main.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/113122966/main.o   "/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/main.c" 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/113122966/main.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/113122966/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
+${OBJECTDIR}/_ext/113122966/SerialSPI.o: /Users/pdulapalli/Documents/Duke/Fall\ 2015/BME\ 464/Project/Apnea\ Respiration\ Control/ApneaRespirationControl-Software/SerialSPI.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/113122966" 
+	@${RM} ${OBJECTDIR}/_ext/113122966/SerialSPI.o.d 
+	@${RM} ${OBJECTDIR}/_ext/113122966/SerialSPI.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/113122966/SerialSPI.o   "/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SerialSPI.c" 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/113122966/SerialSPI.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/113122966/SerialSPI.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
+${OBJECTDIR}/_ext/113122966/ADXL313.o: /Users/pdulapalli/Documents/Duke/Fall\ 2015/BME\ 464/Project/Apnea\ Respiration\ Control/ApneaRespirationControl-Software/ADXL313.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/113122966" 
+	@${RM} ${OBJECTDIR}/_ext/113122966/ADXL313.o.d 
+	@${RM} ${OBJECTDIR}/_ext/113122966/ADXL313.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/113122966/ADXL313.o   "/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ADXL313.c" 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/113122966/ADXL313.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/113122966/ADXL313.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
 else
+${OBJECTDIR}/_ext/113122966/main.o: /Users/pdulapalli/Documents/Duke/Fall\ 2015/BME\ 464/Project/Apnea\ Respiration\ Control/ApneaRespirationControl-Software/main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/113122966" 
+	@${RM} ${OBJECTDIR}/_ext/113122966/main.o.d 
+	@${RM} ${OBJECTDIR}/_ext/113122966/main.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/113122966/main.o   "/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/main.c" 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/113122966/main.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/113122966/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
+${OBJECTDIR}/_ext/113122966/SerialSPI.o: /Users/pdulapalli/Documents/Duke/Fall\ 2015/BME\ 464/Project/Apnea\ Respiration\ Control/ApneaRespirationControl-Software/SerialSPI.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/113122966" 
+	@${RM} ${OBJECTDIR}/_ext/113122966/SerialSPI.o.d 
+	@${RM} ${OBJECTDIR}/_ext/113122966/SerialSPI.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/113122966/SerialSPI.o   "/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SerialSPI.c" 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/113122966/SerialSPI.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/113122966/SerialSPI.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
+${OBJECTDIR}/_ext/113122966/ADXL313.o: /Users/pdulapalli/Documents/Duke/Fall\ 2015/BME\ 464/Project/Apnea\ Respiration\ Control/ApneaRespirationControl-Software/ADXL313.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/113122966" 
+	@${RM} ${OBJECTDIR}/_ext/113122966/ADXL313.o.d 
+	@${RM} ${OBJECTDIR}/_ext/113122966/ADXL313.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/113122966/ADXL313.o   "/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ADXL313.c" 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/113122966/ADXL313.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/113122966/ADXL313.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
 endif
 
 # ------------------------------------------------------------------------------------
@@ -97,11 +145,11 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/ApneaRespirationControl-Software.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_LD} $(MP_EXTRA_LD_PRE)   -p$(MP_PROCESSOR_OPTION_LD)  -w -x -u_DEBUG -m"${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"  -z__MPLAB_BUILD=1  -z__MPLAB_DEBUG=1 -z__MPLAB_DEBUGGER_PK3=1 $(MP_LINKER_DEBUG_OPTION) -l ${MP_CC_DIR}/../lib  -o dist/${CND_CONF}/${IMAGE_TYPE}/ApneaRespirationControl-Software.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}   
+	${MP_LD} $(MP_EXTRA_LD_PRE)   -p$(MP_PROCESSOR_OPTION_LD)  -w -x -u_DEBUG -m"${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"  -z__MPLAB_BUILD=1  -u_CRUNTIME -z__MPLAB_DEBUG=1 -z__MPLAB_DEBUGGER_PK3=1 $(MP_LINKER_DEBUG_OPTION) -l ${MP_CC_DIR}/../lib  -o dist/${CND_CONF}/${IMAGE_TYPE}/ApneaRespirationControl-Software.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}   
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/ApneaRespirationControl-Software.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_LD} $(MP_EXTRA_LD_PRE)   -p$(MP_PROCESSOR_OPTION_LD)  -w  -m"${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"  -z__MPLAB_BUILD=1  -l ${MP_CC_DIR}/../lib  -o dist/${CND_CONF}/${IMAGE_TYPE}/ApneaRespirationControl-Software.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}   
+	${MP_LD} $(MP_EXTRA_LD_PRE)   -p$(MP_PROCESSOR_OPTION_LD)  -w  -m"${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"  -z__MPLAB_BUILD=1  -u_CRUNTIME -l ${MP_CC_DIR}/../lib  -o dist/${CND_CONF}/${IMAGE_TYPE}/ApneaRespirationControl-Software.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}   
 endif
 
 
