@@ -1,11 +1,18 @@
-#define DEFINE_VARIABLES
+/*
+ * File:   ADXL313.c
+ * Author: Praveenanurag Dulapalli
+ *
+ * Created: 10/02/2015
+ * Last Modified: 10/11/2015
+ */
+
 #include "ADXL313.h"
 
 /*
 
 #define ADXL313_SPI_4_WIRE          0b0
 #define ADXL313_HALF_G_RANGE        0b00
-#define ADXL313_MEASUREMENT_MODE    0b1
+#define ADXL313_MEASUREMENT_ENABLE  0b1
 #define ADXL313_NO_SLEEP            0b0
 #define ADXL313_LEFT_JUSTIFY        0b1
 #define ADXL313_SELF_TEST_OFF       0b0
@@ -14,19 +21,27 @@
 
  */
 void initializeADXL313(void){    
-    SOFTRESET = ADXL313_BEGIN_SOFT_RESET;
+   //SOFTRESET = ADXL313_BEGIN_SOFT_RESET;
     
-    POWERCTLbits.SLEEP = ADXL313_NO_SLEEP;
-    POWERCTLbits.LINK = ADXL313_DEASSERT_LINK;
-    POWERCTLbits.I2C_DISABLE = ADXL313_DISABLE_I2C;
-    POWERCTLbits.MEASURE = ADXL313_MEASUREMENT_MODE;
-    prepareRegisterControlBits(ADXL313_POWER_CTL);
     
-    DATAFORMATbits.SELF_TEST = ADXL313_SELF_TEST_OFF;
-    DATAFORMATbits.SPI = ADXL313_SPI_4_WIRE;
-    DATAFORMATbits.RANGE = ADXL313_HALF_G_RANGE;
-    DATAFORMATbits.JUSTIFY = ADXL313_LEFT_JUSTIFY;
-    prepareRegisterControlBits(ADXL313_DATA_FORMAT);
+    
+    //POWERCTLbits.SLEEP = ADXL313_NO_SLEEP;
+    //POWERCTLbits.LINK = ADXL313_DEASSERT_LINK;
+    //POWERCTLbits.I2C_DISABLE = ADXL313_DISABLE_I2C;
+    //POWERCTLbits.MEASURE = ADXL313_MEASUREMENT_MODE;
+    
+    
+    //prepareRegisterControlBits(ADXL313_POWER_CTL);
+    
+    
+    
+    //DATAFORMATbits.SELF_TEST = ADXL313_SELF_TEST_OFF;
+    //DATAFORMATbits.SPI = ADXL313_SPI_4_WIRE;
+    //DATAFORMATbits.RANGE = ADXL313_HALF_G_RANGE;
+    //DATAFORMATbits.JUSTIFY = ADXL313_LEFT_JUSTIFY;
+    //prepareRegisterControlBits(ADXL313_DATA_FORMAT);
+    
+    
     
 }
 
@@ -52,6 +67,7 @@ void initializeADXL313(void){
 } DATAFORMATbits;
 */
 
+/*
 void prepareRegisterControlBits(unsigned char whichRegister){
     switch(whichRegister){
         case ADXL313_POWER_CTL:
@@ -76,5 +92,5 @@ void prepareRegisterControlBits(unsigned char whichRegister){
             break;
     }
 }
-
+*/
 

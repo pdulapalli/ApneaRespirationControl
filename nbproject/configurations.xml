@@ -7,9 +7,9 @@
       <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/General.h</itemPath>
       <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/Lcd.h</itemPath>
       <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ApneaMonitor.h</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SerialSPI.h</itemPath>
       <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ADXL313.h</itemPath>
       <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/DataManager.h</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SPIComm.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -19,8 +19,9 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/main.c</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SerialSPI.c</itemPath>
       <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ADXL313.c</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/Lcd.c</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SPIComm.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -28,6 +29,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>/Users/pdulapalli/Downloads/LabBTemplate</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
@@ -104,6 +108,9 @@
         <property key="stack-analysis-mcc18" value="false"/>
         <property key="stack-analysis-mplink" value="false"/>
       </C18LanguageToolchain>
+      <PICkit3PlatformTool>
+        <property key="firmware.download.all" value="false"/>
+      </PICkit3PlatformTool>
     </conf>
   </confs>
 </configurationDescriptor>

@@ -2,7 +2,8 @@
  * File:   ADXL313.h
  * Author: Praveenanurag Dulapalli
  *
- * Created on October 2, 2015, 11:03 AM
+ * Created: 10/02/2015
+ * Last Modified: 10/11/2015
  */
 
 #ifndef ADXL313_H
@@ -27,43 +28,43 @@ extern "C" {
 /*-------------------- BEGIN REGISTER ADDRESSES ----------------*/
 
 //Device ID Registers
-#define ADXL313_DEVID_0         0x00
-#define ADXL313_DEVID_1         0x01
-#define ADXL313_PARTID          0x02
-#define ADXL313_REVID           0x03
-#define ADXL313_XID             0x04
+#define REG_ADXL313_DEVID_0         0x00
+#define REG_ADXL313_DEVID_1         0x01 
+#define REG_ADXL313_PARTID          0x02 
+#define REG_ADXL313_REVID           0x03
+#define REG_ADXL313_XID             0x04
 
 //Device Reset Register
-#define ADXL313_SOFT_RESET      0x18
+#define REG_ADXL313_SOFT_RESET      0x18
 
 //Offset Registers
-#define ADLX313_OFSX            0x1E
-#define ADXL313_OFSY            0x1F
-#define ADXL313_OFSZ            0x20
+#define REG_ADXL313_OFSX           0x1E
+#define REG_ADXL313_OFSY           0x1F
+#define REG_ADXL313_OFSZ           0x20
 
 //Threshold Registers
-#define ADXL313_THRESH_ACT      0x24
-#define ADXL313_TIME_INACT      0x26
-#define ADXL313_ACT_INACT_CTL   0x27
+#define REG_ADXL313_THRESH_ACT      0x24
+#define REG_ADXL313_TIME_INACT      0x26
+#define REG_ADXL313_ACT_INACT_CTL   0x27
 
-#define ADXL313_BW_RATE         0x2C
-#define ADXL313_POWER_CTL       0x2D
-#define ADXL313_INT_ENABLE      0x2E
-#define ADXL313_INT_MAP         0x2F
-#define ADXL313_INT_SOURCE      0x30
+#define REG_ADXL313_BW_RATE         0x2C
+#define REG_ADXL313_POWER_CTL       0x2D
+#define REG_ADXL313_INT_ENABLE      0x2E
+#define REG_ADXL313_INT_MAP         0x2F
+#define REG_ADXL313_INT_SOURCE      0x30
 
 //Data Output Registers
-#define ADXL313_DATA_FORMAT     0x31
-#define ADXL313_DATA_X0         0x32
-#define ADXL313_DATA_X1         0x33
-#define ADXL313_DATA_Y0         0x34
-#define ADXL313_DATA_Y1         0x35
-#define ADXL313_DATA_Z0         0x36
-#define ADXL313_DATA_Z1         0x37
+#define REG_ADXL313_DATA_FORMAT     0x31
+#define REG_ADXL313_DATA_X0         0x32
+#define REG_ADXL313_DATA_X1         0x33
+#define REG_ADXL313_DATA_Y0         0x34
+#define REG_ADXL313_DATA_Y1         0x35
+#define REG_ADXL313_DATA_Z0         0x36
+#define REG_ADXL313_DATA_Z1         0x37
 
 //FIFO Registers
-#define ADXL313_FIFO_CTL        0x38
-#define ADXL313_FIFO_STATUS     0x39
+#define REG_ADXL313_FIFO_CTL        0x38
+#define REG_ADXL313_FIFO_STATUS     0x39
     
 
 /*-------------------- Control Bits and Parameters ----------------*/
@@ -75,7 +76,7 @@ extern "C" {
 #define ADXL313_NO_SLEEP            0b0
 #define ADXL313_DEASSERT_LINK       0b0
 #define ADXL313_DISABLE_I2C         0b1
-#define ADXL313_MEASUREMENT_MODE    0b1
+#define ADXL313_MEASUREMENT_ENABLE  0b1
 
 //Custom Parameters for Measurement
 #define ADXL313_SPI_4_WIRE          0b0
@@ -97,7 +98,7 @@ EXTERN volatile struct {
 } DATAFORMATbits;
 
 EXTERN volatile unsigned char POWERCTL;
-EXTERN struct {
+EXTERN volatile struct {
     unsigned WAKE_UP:2;
     unsigned SLEEP:1;
     unsigned MEASURE:1;

@@ -3,7 +3,7 @@
  * Author: Praveenanurag Dulapalli
  *
  * Created: 09/27/2015
- * Last Modified: 09/27/2015
+ * Last Modified: 10/11/2015
  */
 
 #ifndef DATAMANAGER_H
@@ -36,6 +36,7 @@ extern Data_Node sensor_data[WINDOW_DURATION*SAMPLES_PER_SECOND]; //Set up globa
 int checkWindowFull(void); //Determine whether buffer fully loaded
 void addData(int dataToAdd, int whereToAdd); //Update data buffer contents
 int latestData(void); //Locate index of most recent data
+double digitalToAnalogValue(unsigned char dataBits_UPPER, unsigned char dataBits_LOWER);
 
 #ifdef	__cplusplus
 }
