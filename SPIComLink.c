@@ -1,6 +1,6 @@
-#include "SPIComm.h"
+#include "SPIComLink.h"
 
-void begin_SPI(){
+void Begin_SPI(void){
     TRISAbits.TRISA5 = OUTPUT;
     TRISCbits.TRISC3 = OUTPUT;    //SCK
     TRISCbits.TRISC4 = INPUT;     //MISO
@@ -15,10 +15,10 @@ void begin_SPI(){
 
 void SPI_Write(unsigned char address, unsigned char data){
     // Activate the SS SPI Select pin
-    LATAbits.LATA5 = 0;
+    LATAbits.LATA5 = LOW;
 
     // Start Register Address transmission
-    SSPBUF = WRITE_ENABLE | address;
+    SSPBUF = WRITE_ENABLE | MULTIPLE_BYTE_DISABLE | address;
 
     // Wait for Data Transmit/Receipt complete
     while(!SSPSTATbits.BF);
@@ -30,16 +30,16 @@ void SPI_Write(unsigned char address, unsigned char data){
     while(!SSPSTATbits.BF);
 
     // CS pin is not active
-    LATAbits.LATA5 = 1;
+    LATAbits.LATA5 = HIGH;
 }
 
-unsigned char SPI_Read(unsigned char address)
+unsigned char SPI_Read(unsigned char address, unsigned char multipleByteConfig)
 {
     // Activate the SS SPI Select pin
-    LATAbits.LATA5 = 0;
+    LATAbits.LATA5 = LOW;
 
     // Start Address transmission
-    SSPBUF = READ_ENABLE | address;
+    SSPBUF = READ_ENABLE | multipleByteConfig | address;
 
     // Wait for Data Transmit/Receipt complete
     while(!SSPSTATbits.BF);
@@ -51,8 +51,9 @@ unsigned char SPI_Read(unsigned char address)
     while(!SSPSTATbits.BF);
 
     // CS pin is not active
-    LATAbits.LATA5 = 1;
+    LATAbits.LATA5 = HIGH;
 
     return(SSPBUF);
 }
+
 

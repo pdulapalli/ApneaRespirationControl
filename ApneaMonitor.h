@@ -19,7 +19,7 @@ extern "C" {
 #include <stdlib.h>
 #include <delays.h>
 
-#include "Lcd.h"
+#include "Lcd.h" //Also includes "General.h" which we need for I/O constants
 #include "DataManager.h"
 
 #define APNEA_THRESHOLD_PERCENT 70

@@ -19,7 +19,7 @@ extern "C" {
 #include <stdlib.h>
 #include <delays.h>
 
-#include "Lcd.h"
+#include "Lcd.h" //Also includes "General.h" which we need for I/O constants
 
 #define WINDOW_DURATION 10
 #define SAMPLES_PER_SECOND 2
@@ -32,6 +32,7 @@ typedef struct {
 } Data_Node;
 
 extern Data_Node sensor_data[WINDOW_DURATION*SAMPLES_PER_SECOND]; //Set up global variable for data acquisition
+
 
 int checkWindowFull(void); //Determine whether buffer fully loaded
 void addData(int dataToAdd, int whereToAdd); //Update data buffer contents

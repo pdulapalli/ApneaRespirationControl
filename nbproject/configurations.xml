@@ -4,12 +4,12 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/General.h</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/Lcd.h</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ApneaMonitor.h</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ADXL313.h</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/DataManager.h</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SPIComm.h</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ADXL313.h</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ApneaMonitor.h</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/DataManager.h</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/General.h</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Lcd.h</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/SPIComLink.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -18,10 +18,11 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/main.c</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/ADXL313.c</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/Lcd.c</itemPath>
-      <itemPath>/Users/pdulapalli/Documents/Duke/Fall 2015/BME 464/Project/Apnea Respiration Control/ApneaRespirationControl-Software/SPIComm.c</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Lcd.c</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/DataManager.c</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/SPIComLink.c</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/main.c</itemPath>
+      <itemPath>/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ADXL313.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
