@@ -10,6 +10,7 @@
 #include "SPIComLink.h"
 
 void initializeADXL313(void){   
+    /*
     //Set 4-wire SPI
     DataFormatReg_ADXL313_bits.SPI = ADXL313_SPI_4_WIRE;
     PowerCTLReg_ADXL313_bits.I2C_DISABLE = ADXL313_DISABLE_I2C;
@@ -66,10 +67,11 @@ void initializeADXL313(void){
     
     writeRegisterControlBits(REG_ADDR_ADXL313_POWER_CTL, PowerCTLReg_ADXL313);
     Delay10TCYx(1);
-
+     */
+    
     //OLD BACKUP
     //ADXL313 Register Initialization Sequence
-    /*
+    
     SPI_Write(REG_ADDR_ADXL313_DATA_FORMAT, 0x40); //Set 4-wire SPI
     Delay10TCYx(1);
 
@@ -91,7 +93,7 @@ void initializeADXL313(void){
     SPI_Write(REG_ADDR_ADXL313_POWER_CTL, 0x48); //Disable sleep-related bits
                                                    //Begin measurement
     Delay10TCYx(1);
-    */
+    
 }   
 
 void writeRegisterControlBits(unsigned char regAddr, unsigned char regControlBits){
@@ -140,31 +142,32 @@ void updateRegisterControlBits(unsigned char regAddr){
 }
 
 void obtainAxisMeasurements(void){
-    /*
-   int32 scratch;
+    
+   long scratch;
    float scale;
    
-   int1 neg_x = FALSE;
-   int1 neg_y = FALSE;
-   int1 neg_z = FALSE;
+   int neg_x = FALSE;
+   int neg_y = FALSE;
+   int neg_z = FALSE;
+   
+   int x_accel, y_accel, z_accel, x_g, y_g, z_g;
    
    x_accel = 0;
    y_accel = 0;
    z_accel = 0;
    
-   output_low(CS);
-   delay_us(1);
-   spi_write(READ | MULTIBYTE_TRANSFER | DATA_REG);
-   x_accel = spi_read(0); // x low byte
-   x_accel = x_accel | ((int32)spi_read(0) << 8); // x high byte
-   y_accel = spi_read(0); // y low byte
-   y_accel = y_accel | ((int32)spi_read(0) << 8); // y high byte
-   z_accel = spi_read(0); // z low byte
-   z_accel = z_accel | ((int32)spi_read(0) << 8); // z high byte
-   delay_us(1);
-   output_high(CS);
-   
-   if (bit_test(x_accel, SIGN_BIT)) {
+   SPI_CSN = 0;
+   SPI_Write(READ | MULTIPLE_BYTE_ENABLE | REG_ADDR_ADXL313_DATA_X0);
+   x_accel = SPI_Read(0, MULTIPLE_BYTE_DISABLE); // x low byte
+   x_accel = x_accel | ((int)SPI_Read(0) << 8); // x high byte
+   y_accel = SPI_Read(0, MULTIPLE_BYTE_DISABLE); // y low byte
+   y_accel = y_accel | ((int)SPI_Read(0) << 8); // y high byte
+   z_accel = SPI_Read(0, MULTIPLE_BYTE_DISABLE); // z low byte
+   z_accel = z_accel | ((int)SPI_Read(0) << 8); // z high byte
+   Delay10KTCYx(0);
+   SPI_CSN = 1;
+    
+   if (bit_Test(x_accel, SIGN_BIT)) {
       neg_x = TRUE;
       x_accel = ~x_accel;
       x_accel++;
@@ -174,7 +177,7 @@ void obtainAxisMeasurements(void){
       neg_x = FALSE;
    }
    
-   if (bit_test(y_accel, SIGN_BIT)) {
+   if (bit_Test(y_accel, SIGN_BIT)) {
       neg_y = TRUE;
       y_accel = ~y_accel;
       y_accel++;
@@ -184,7 +187,7 @@ void obtainAxisMeasurements(void){
       neg_y = FALSE;
    }
    
-   if (bit_test(z_accel, SIGN_BIT)) {
+   if (bit_Test(z_accel, SIGN_BIT)) {
       neg_z = TRUE;
       z_accel = ~z_accel;
       z_accel++;
@@ -199,7 +202,7 @@ void obtainAxisMeasurements(void){
    // workaround is to note that all accelerations must add up to 1 g, so normalize
    // each by the the total magnitude to compensate
    
-   scratch = ((int32)x_accel * (int32)x_accel) + ((int32)y_accel * (int32)y_accel) + ((int32)z_accel * (int32)z_accel);
+   scratch = ((int)x_accel * (int)x_accel) + ((int)y_accel * (int)y_accel) + ((int)z_accel * (int)z_accel);
    scale = sqrt((float)scratch);
    
    x_g = x_accel / scale;
@@ -216,7 +219,12 @@ void obtainAxisMeasurements(void){
    if (neg_z == TRUE) {
       z_g = -1 * z_g;
    }
-     */
+     
 }
+
+int bit_Test(unsigned char axisMeasurement, unsigned char expectedSign){
+    return 0;
+}
+
 
 

@@ -66,7 +66,28 @@ void defineGlobalVariables(void){
     SoftResetReg_ADXL313 = 0x00;            
 }
 
+double power10(int value){
+    return pow(10, (double) value);
+}
+
+void LCDPutNum(unsigned int Val)
+{  
+  int i;
+  unsigned char temp;
+  double numDigits = 1+floor(log10((double) Val));
+  double currentVal;
+   
+  for(i = 0; i < numDigits; i++){
+      LCDGoto(i, 0);
+      currentVal = (double) Val/(power10(numDigits-i-1));
+      //temp = (unsigned char) currentVal;
+      LCDPutChar(currentVal + '0');
+  }
+}
+
+
 void main() {
+    
     int i;
     unsigned char dataIn;
 
@@ -87,15 +108,19 @@ void main() {
     TRISD = 0x00; //Digital out
 
     LCDInit();
-    LCDClear();
-    LCDGoto(0, 0);
 
+   
+    //16*10+13
+    //        173
+    
     Begin_SPI();
     
     initializeADXL313();
     
     while(1){
-        dataIn = SPI_Read(REG_ADDR_ADXL313_DEVID_0, MULTIPLE_BYTE_DISABLE);
+        dataIn = SPI_Read(REG_ADDR_ADXL313_DATA_Z1, MULTIPLE_BYTE_DISABLE);
+        LCDGoto(0, 0);
+        LCDPutNum(dataIn);
         Delay10KTCYx(1);
     }
 
@@ -109,6 +134,12 @@ void main() {
         [5] Continue to collect data into buffer and repeating step [4] as necessary
     *   [6] If amplitude falls below certain percentage threshold (of mean), set stimulus I/O Pin HIGH
     */
+    
+    
+    
 }
+
+
+
 
 

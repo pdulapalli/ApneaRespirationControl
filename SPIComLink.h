@@ -31,18 +31,23 @@ extern "C" {
 //SPI Status Parameters
 #define SPI_SMP_END                 0x80
 #define SPI_SMP_MID                 0x00
-#define SPI_CKE_TRANSMIT_FALLING
-#define SPI_CKE_TRANSMIT_RISING
+#define SPI_CKE_TRANSMIT_TO_IDLE    0x40
+#define SPI_CKE_TRANSMIT_FROM_IDLE  0x00
 
 //SPI Control Parameters
 #define ENABLE_SSP  0x20    //Enable Synchronous Serial Port
 #define SCK_POLARITY_HIGH   0x10 //Idle state for SCK is at a HIGH level
 #define SSP_Master_Mode 0x00
 #define SCK_FOSC_DIV_4  0x00    //Set SCK at Fosc_rate/4
+    
+//MSSP Status Registers
+#define SPI_CSN     LATAbits.LATA5
+#define SPI_SCK     LATCbits.LATC3
+#define SPI_MISO    PORTCbits.SDI1
+#define SPI_MOSI    LATCbits.LATC4
 
 void Begin_SPI(void);
 void SPI_Write(unsigned char address, unsigned char data);
-
 unsigned char SPI_Read(unsigned char address, unsigned char multipleByteConfig);
 
 #ifdef  __cplusplus

@@ -428,6 +428,7 @@ void LCDPutChar(UINT8_T Data)
 
 void LCDPutByte(UINT8_T Val)
 {
+    //96 > 96
   LCDPutChar(Val/10+'0');                   // Output the high digit
   LCDPutChar(Val % 10+'0');                 // Output low
 }

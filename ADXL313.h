@@ -27,6 +27,9 @@ extern "C" {
 #define EXTERN extern
 #endif /* DEFINE_VARIABLES */
 
+#define SIGN_BIT    1
+#define ACCEL_MASK  0xFF    
+    
 /*-------------------- BEGIN REGISTER ADDRESSES ----------------*/
 
 //Device ID Registers
@@ -166,6 +169,7 @@ void initializeADXL313(void);
 void writeRegisterControlBits(unsigned char regAddr, unsigned char regControlBits);
 void updateRegisterControlBits(unsigned char regAddr);
 void obtainAxisMeasurements(void);
+int bit_Test(unsigned char axisMeasurement, unsigned char expectedSign);
 
 #ifdef	__cplusplus
 }
