@@ -2,7 +2,6 @@
 int a;
 
 void Begin_SPI(void){
-    a = 0;
     TRISAbits.TRISA5 = OUTPUT;
     TRISCbits.TRISC3 = OUTPUT;    //SCK
     TRISCbits.TRISC4 = INPUT;     //MISO
@@ -49,17 +48,15 @@ void SPI_Write(unsigned char address, unsigned char data){
     LATAbits.LATA5 = HIGH;
 }
 
-unsigned char SPI_Read(unsigned char address, unsigned char multipleByteConfig)
-{
+unsigned char SPI_Read(unsigned char address){
     unsigned char readValue, dummyRead;
-    unsigned char temp;
     
     // Activate the SS SPI Select pin
     LATAbits.LATA5 = LOW;
-
+    
     // Start Address transmission
-    SSPBUF = READ_ENABLE | multipleByteConfig | address;
-        
+    SSPBUF = READ_ENABLE | MULTIPLE_BYTE_DISABLE | address;
+
     // Wait for Data Transmit/Receipt complete
     while(!SSPSTATbits.BF);
 
@@ -68,7 +65,6 @@ unsigned char SPI_Read(unsigned char address, unsigned char multipleByteConfig)
     
     // Send Dummy transmission for reading the data
     SSPBUF = 0x00;
-    
     
     // Wait for Data Transmit/Receipt complete
     while(!SSPSTATbits.BF){
@@ -84,4 +80,41 @@ unsigned char SPI_Read(unsigned char address, unsigned char multipleByteConfig)
     return(readValue);
 }
 
+unsigned char *SPI_Read_Multiple(unsigned char start_address, int numBytesToRead, unsigned char byteData[]){
+    unsigned char dummyRead;
+    int i; 
+    
+    // Activate the SS SPI Select pin
+    LATAbits.LATA5 = LOW;
+    
+    /*---Must select first register to read --*/
+    
+    // Start Address transmission
+    SSPBUF = READ_ENABLE | MULTIPLE_BYTE_ENABLE | start_address;
+
+    // Wait for Data Transmit/Receipt complete
+    while(!SSPSTATbits.BF);
+    
+
+    //Read dummy data from SSP Buffer
+    dummyRead = SSPBUF;
+    
+    for(i = 0; i < numBytesToRead; i++){
+        // Send Dummy transmission for reading the data
+        SSPBUF = 0x00;
+    
+        // Wait for Data Transmit/Receipt complete
+        while(!SSPSTATbits.BF){
+            dummyRead = SSPBUF;
+        }
+    
+        //Read i-th data input from SSPBUF for MISO signal
+        byteData[i] = SSPBUF;
+    }
+        
+    // CS pin is not active
+    LATAbits.LATA5 = HIGH;
+        
+    return(byteData);
+}
 

@@ -18,7 +18,8 @@ extern "C" {
 #include <math.h>
 #include <stdlib.h>
 #include <delays.h>
-
+    
+#include "ADXL313.h"
 #include "Lcd.h" //Also includes "General.h" which we need for I/O constants
 #include "DataManager.h"
 
@@ -27,7 +28,7 @@ extern "C" {
 
 int isApneaCondition(void); //Determine if patient has entered apnea state
 void sendStimulus(void); //Set designated I/O pin HIGH to activate stimulus
-int computeAmplitude(Data_Node dataPoint); //Perform calculation to obtain amplitude of displacement
+int computeAmplitude(struct Data_Node dataPoint); //Perform calculation to obtain amplitude of displacement
 
 #ifdef	__cplusplus
 }

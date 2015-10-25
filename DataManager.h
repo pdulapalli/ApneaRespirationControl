@@ -19,6 +19,7 @@ extern "C" {
 #include <stdlib.h>
 #include <delays.h>
 
+#include "ADXL313.h"
 #include "Lcd.h" //Also includes "General.h" which we need for I/O constants
 
 #define WINDOW_DURATION 10
@@ -26,16 +27,19 @@ extern "C" {
 #define DATA_BITS_LENGTH 10 //Full resolution, left-justified 0.5 g measurement
                             //LSB will always be 0
 
-typedef struct {
-    int value; //Contains the data 'packet' at this instant
+struct Data_Node{
+    AccelData axisMeasurements; //Contains the data 'packet' at this instant
     int most_recent; //A value of '1' indicates whether data is latest
-} Data_Node;
+    struct Data_Node *next; 
+};
 
-extern Data_Node sensor_data[WINDOW_DURATION*SAMPLES_PER_SECOND]; //Set up global variable for data acquisition
+extern struct Data_Node sensor_data[WINDOW_DURATION*SAMPLES_PER_SECOND]; //Set up global variable for data acquisition
+extern struct Data_Node *sensor_data_HEAD;
+extern struct Data_Node *sensor_data_TAIL;
 
-
-int checkWindowFull(void); //Determine whether buffer fully loaded
-void addData(int dataToAdd, int whereToAdd); //Update data buffer contents
+int checkBufferFull(void); //Determine whether buffer fully loaded
+void addData(unsigned int dataToAdd); //Update data buffer contents
+void removeData(unsigned int numElements);  //Remove oldest data
 int latestData(void); //Locate index of most recent data
 double digitalToAnalogValue(unsigned char dataBits_UPPER, unsigned char dataBits_LOWER);
 

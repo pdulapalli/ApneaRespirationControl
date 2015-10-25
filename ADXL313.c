@@ -35,7 +35,7 @@ void initializeADXL313(void){
 
     
     //Set 1600 Hz output data rate
-    BWRateReg_ADXL313_bits.RATE = ADXL313_DATA_RATE_1600_HZ;
+    BWRateReg_ADXL313_bits.RATE = ADXL313_DATA_RATE_800_HZ;
 
     writeRegisterControlBits(REG_ADDR_ADXL313_BW_RATE, BWRateReg_ADXL313);
     Delay10TCYx(1);
@@ -81,7 +81,7 @@ void initializeADXL313(void){
     SPI_Write(REG_ADDR_ADXL313_POWER_CTL, 0x00); //Standby
     Delay10TCYx(1);
 
-    SPI_Write(REG_ADDR_ADXL313_BW_RATE, ADXL313_DATA_RATE_1600_HZ); //Set 1600 Hz output data rate
+    SPI_Write(REG_ADDR_ADXL313_BW_RATE, ADXL313_DATA_RATE_800_HZ); //Set 800 Hz output data rate
     Delay10TCYx(1);
 
     SPI_Write(REG_ADDR_ADXL313_INT_ENABLE, ADXL313_DISABLE_ALL_INTERRUPTS); //DISABLE_INTERRUPTS
@@ -141,85 +141,8 @@ void updateRegisterControlBits(unsigned char regAddr){
     }
 }
 
-void obtainAxisMeasurements(void){
-    
-   long scratch;
-   float scale;
-   
-   int neg_x = FALSE;
-   int neg_y = FALSE;
-   int neg_z = FALSE;
-   
-   int x_accel, y_accel, z_accel, x_g, y_g, z_g;
-   
-   x_accel = 0;
-   y_accel = 0;
-   z_accel = 0;
-   
-   SPI_CSN = 0;
-   SPI_Write(READ | MULTIPLE_BYTE_ENABLE | REG_ADDR_ADXL313_DATA_X0);
-   x_accel = SPI_Read(0, MULTIPLE_BYTE_DISABLE); // x low byte
-   x_accel = x_accel | ((int)SPI_Read(0) << 8); // x high byte
-   y_accel = SPI_Read(0, MULTIPLE_BYTE_DISABLE); // y low byte
-   y_accel = y_accel | ((int)SPI_Read(0) << 8); // y high byte
-   z_accel = SPI_Read(0, MULTIPLE_BYTE_DISABLE); // z low byte
-   z_accel = z_accel | ((int)SPI_Read(0) << 8); // z high byte
-   Delay10KTCYx(0);
-   SPI_CSN = 1;
-    
-   if (bit_Test(x_accel, SIGN_BIT)) {
-      neg_x = TRUE;
-      x_accel = ~x_accel;
-      x_accel++;
-      x_accel = x_accel & ACCEL_MASK;
-   }
-   else {
-      neg_x = FALSE;
-   }
-   
-   if (bit_Test(y_accel, SIGN_BIT)) {
-      neg_y = TRUE;
-      y_accel = ~y_accel;
-      y_accel++;
-      y_accel = y_accel & ACCEL_MASK;
-   }
-   else {
-      neg_y = FALSE;
-   }
-   
-   if (bit_Test(z_accel, SIGN_BIT)) {
-      neg_z = TRUE;
-      z_accel = ~z_accel;
-      z_accel++;
-      z_accel = z_accel & ACCEL_MASK;
-   }
-   else {
-      neg_z = FALSE;
-   }
-   
-   // had problems when prototyping this as the 2 methods for calculating angle didn't agree due to
-   // gain imbalances in the x, y and z accelerations
-   // workaround is to note that all accelerations must add up to 1 g, so normalize
-   // each by the the total magnitude to compensate
-   
-   scratch = ((int)x_accel * (int)x_accel) + ((int)y_accel * (int)y_accel) + ((int)z_accel * (int)z_accel);
-   scale = sqrt((float)scratch);
-   
-   x_g = x_accel / scale;
-   if (neg_x == TRUE) {
-      x_g = -1 * x_g;
-   }
-   
-   y_g = y_accel / scale;
-   if (neg_y == TRUE) {
-      y_g = -1 * y_g;
-   }
-   
-   z_g = z_accel / scale;
-   if (neg_z == TRUE) {
-      z_g = -1 * z_g;
-   }
-     
+void readAxisMeasurements(void){
+//    SPI_Read(REG_ADDR_ADXL313_DATA_X
 }
 
 int bit_Test(unsigned char axisMeasurement, unsigned char expectedSign){

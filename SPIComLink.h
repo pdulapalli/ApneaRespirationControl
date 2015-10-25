@@ -48,7 +48,8 @@ extern "C" {
 
 void Begin_SPI(void);
 void SPI_Write(unsigned char address, unsigned char data);
-unsigned char SPI_Read(unsigned char address, unsigned char multipleByteConfig);
+unsigned char SPI_Read(unsigned char address);
+unsigned char *SPI_Read_Multiple(unsigned char start_address, int numBytesToRead, unsigned char byteData[]);
 
 #ifdef  __cplusplus
 }

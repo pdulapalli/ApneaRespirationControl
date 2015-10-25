@@ -98,7 +98,8 @@ extern "C" {
 #define ADXL313_DISABLE_ALL_INTERRUPTS      0
 
 //Bandwidths and Rate Parameters
-#define ADXL313_DATA_RATE_1600_HZ           0xE 
+#define ADXL313_DATA_RATE_1600_HZ           0x0E
+#define ADXL313_DATA_RATE_800_HZ            0x0D
 
 extern unsigned char DataFormatReg_ADXL313, PowerCTLReg_ADXL313,
                      IntEnableReg_ADXL313, BWRateReg_ADXL313,
@@ -162,13 +163,24 @@ extern int cows;
 #define D0 0
 
 
+/*-----Accelerometer Measurements------*/
+typedef struct{
+    int x_axis;
+    int y_axis;
+    int z_axis;
+    unsigned int measurementRange; //0 = 0.5g, 1 = 1.0g
+    unsigned int numBits; 
+} AccelData;
+ 
+
+
 /*-----Global Variables from Main-----*/
 //Tracking variable to manage what state device currently in
 
 void initializeADXL313(void);
 void writeRegisterControlBits(unsigned char regAddr, unsigned char regControlBits);
 void updateRegisterControlBits(unsigned char regAddr);
-void obtainAxisMeasurements(void);
+void readAxisMeasurements(void);
 int bit_Test(unsigned char axisMeasurement, unsigned char expectedSign);
 
 #ifdef	__cplusplus
