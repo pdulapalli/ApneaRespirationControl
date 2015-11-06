@@ -12,6 +12,8 @@
 extern "C" {
 #endif
 
+#include "Globals.h"
+
 #include <p18f46k22.h>
 #include <stdio.h>
 #include <math.h>
@@ -46,7 +48,7 @@ extern "C" {
 #define SPI_MISO    PORTCbits.SDI1
 #define SPI_MOSI    LATCbits.LATC4
 
-void Begin_SPI(void);
+void initializeSPI(void);
 void SPI_Write(unsigned char address, unsigned char data);
 unsigned char SPI_Read(unsigned char address);
 unsigned char *SPI_Read_Multiple(unsigned char start_address, int numBytesToRead, unsigned char byteData[]);

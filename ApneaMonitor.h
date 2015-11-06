@@ -13,6 +13,8 @@
 extern "C" {
 #endif
 
+#include "Globals.h"
+    
 #include <p18f46k22.h>
 #include <stdio.h>
 #include <math.h>
@@ -24,11 +26,16 @@ extern "C" {
 #include "DataManager.h"
 
 #define APNEA_THRESHOLD_PERCENT 70
-#define REQ_APNEA_ONSET_DURATION 2 //time required before declaring apnea condition
-
+#define APNEA_REFERENCE_DURATION 12
+#define APNEA_DETECT_DURATION   2 //time required before declaring apnea condition
+#define STIMULUS_PIN LATEbits.LATE1
+#define STIMULUS_HIGH_MICROS    300
+#define STIMULUS_LOW_MICROS     19700         
+    
 int isApneaCondition(void); //Determine if patient has entered apnea state
 void sendStimulus(void); //Set designated I/O pin HIGH to activate stimulus
-int computeAmplitude(struct Data_Node dataPoint); //Perform calculation to obtain amplitude of displacement
+void delayOneSamplePeriod(void); //Performs calculation to space measurements with appropriate sample period
+void addToReferenceCalc(struct Data_Node *dataPoint);
 
 #ifdef	__cplusplus
 }

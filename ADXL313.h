@@ -3,7 +3,7 @@
  * Author: Praveenanurag Dulapalli
  *
  * Created: 10/02/2015
- * Last Modified: 10/19/2015
+ * Last Modified: 10/29/2015
  */
 
 #ifndef ADXL313_H
@@ -13,12 +13,17 @@
 extern "C" {
 #endif
 
+#include "Globals.h"
+    
 #include <p18f46k22.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <delays.h>
+    
 #include "Lcd.h" //Also includes "General.h" which we need for I/O constants
+#include "DataManager.h"
+#include "SPIComLink.h"
 
 
 #ifdef DEFINE_VARIABLES
@@ -28,8 +33,8 @@ extern "C" {
 #endif /* DEFINE_VARIABLES */
 
 #define SIGN_BIT    1
-#define ACCEL_MASK  0xFF    
-    
+#define ACCEL_MASK  0xFF
+
 /*-------------------- BEGIN REGISTER ADDRESSES ----------------*/
 
 //Device ID Registers
@@ -78,110 +83,39 @@ extern "C" {
 #define ADXL313_BEGIN_SOFT_RESET    0x52
 
 //Parameters for Power Control
-#define ADXL313_DISABLE_I2C         1
-#define ADXL313_DEASSERT_LINK       0
-#define ADXL313_DISABLE_AUTO_SLEEP  0
-#define ADXL313_MEASUREMENT_ENABLE  1
-#define ADXL313_STANDBY_MODE        0
-#define ADXL313_NO_SLEEP            0
+#define ADXL313_DISABLE_I2C         0x40
+#define ADXL313_DEASSERT_LINK       0x00
+#define ADXL313_DISABLE_AUTO_SLEEP  0x00
+#define ADXL313_MEASUREMENT_ENABLE  0x08
+#define ADXL313_STANDBY_MODE        0x00
+#define ADXL313_NO_SLEEP            0x00
 
 //Parameters for Data Format
-#define ADXL313_SELF_TEST_OFF       0
-#define ADXL313_SPI_4_WIRE          0
-#define ADXL313_USE_FULL_RES        1
-#define ADXL313_10_BIT_RES          0
-#define ADXL313_RIGHT_JUSTIFY       0
-#define ADXL313_HALF_G_RANGE        0b00
-#define ADXL313_ONE_G_RANGE         0b01
+#define ADXL313_SELF_TEST_OFF       0x00
+#define ADXL313_SPI_4_WIRE          0x00
+#define ADXL313_USE_FULL_RES        0x08
+#define ADXL313_10_BIT_RES          0x00
+#define ADXL313_RIGHT_JUSTIFY       0x00
+#define ADXL313_HALF_G_RANGE        0x00
+#define ADXL313_ONE_G_RANGE         0x01
+#define ADXL313_TWO_G_RANGE         0x02
 
 //Interrupt Management
-#define ADXL313_DISABLE_ALL_INTERRUPTS      0
+#define ADXL313_DISABLE_ALL_INTERRUPTS      0x00
 
 //Bandwidths and Rate Parameters
 #define ADXL313_DATA_RATE_1600_HZ           0x0E
 #define ADXL313_DATA_RATE_800_HZ            0x0D
 
-extern unsigned char DataFormatReg_ADXL313, PowerCTLReg_ADXL313,
-                     IntEnableReg_ADXL313, BWRateReg_ADXL313,
-                     SoftResetReg_ADXL313;
-
-//Bit Fields for Important ADXL313 Registers. MSB to LSB oriented Top to Bottom
-typedef struct{
-    unsigned int :1;
-    unsigned int I2C_DISABLE:1;
-    unsigned int LINK:1;
-    unsigned int AUTO_SLEEP:1;
-    unsigned int MEASURE:1;
-    unsigned int SLEEP:1;
-    unsigned int WAKE_UP:2;
-} PowerCTLReg_ADXL313_Bitfield;
-
-typedef struct{
-    unsigned int SELF_TEST:1;
-    unsigned int SPI:1;
-    unsigned int INT_INVERT:1;
-    unsigned int :1;
-    unsigned int FULL_RES:1;
-    unsigned int JUSTIFY:1;
-    unsigned int RANGE:2;
-} DataFormatReg_ADXL313_Bitfield;
-
-typedef struct{
-    unsigned int DATA_READY:1;
-    unsigned int :1;
-    unsigned int :1;
-    unsigned int ACTIVITY:1;
-    unsigned int INACTIVITY:1;
-    unsigned int :1;
-    unsigned int WATERMARK:1;
-    unsigned int OVERRUN:1;
-} IntEnableReg_ADXL313_Bitfield;
-
-typedef struct{
-    unsigned int :1;
-    unsigned int :1;
-    unsigned int :1;
-    unsigned int LOW_POWER:1;
-    unsigned int RATE:4;
-} BWRateReg_ADXL313_Bitfield;
-
-extern PowerCTLReg_ADXL313_Bitfield PowerCTLReg_ADXL313_bits;
-extern DataFormatReg_ADXL313_Bitfield DataFormatReg_ADXL313_bits;
-extern IntEnableReg_ADXL313_Bitfield IntEnableReg_ADXL313_bits;
-extern BWRateReg_ADXL313_Bitfield BWRateReg_ADXL313_bits;
-
-extern int cows;
-/*-------BIT SHIFT CONSTANTS------*/
-
-#define D7 7
-#define D6 6
-#define D5 5
-#define D4 4
-#define D3 3
-#define D2 2
-#define D1 1
-#define D0 0
-
-
-/*-----Accelerometer Measurements------*/
-typedef struct{
-    int x_axis;
-    int y_axis;
-    int z_axis;
-    unsigned int measurementRange; //0 = 0.5g, 1 = 1.0g
-    unsigned int numBits; 
-} AccelData;
- 
-
-
-/*-----Global Variables from Main-----*/
-//Tracking variable to manage what state device currently in
 
 void initializeADXL313(void);
 void writeRegisterControlBits(unsigned char regAddr, unsigned char regControlBits);
 void updateRegisterControlBits(unsigned char regAddr);
 void readAxisMeasurements(void);
-int bit_Test(unsigned char axisMeasurement, unsigned char expectedSign);
+double digitalToAnalogMeasurement(unsigned int digitalInput, int measurementRange);
+unsigned int concatenateRawValues(unsigned char upperBits, unsigned char lowerBits);
+double computeAmplitude(AccelData *axisMeasurement); //Perform calculation to obtain amplitude of displacement
+
 
 #ifdef	__cplusplus
 }
