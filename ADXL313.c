@@ -30,32 +30,40 @@ void initializeADXL313(void){
     Delay10TCYx(1);
 
     SPI_Write(REG_ADDR_ADXL313_POWER_CTL, ADXL313_DISABLE_I2C | ADXL313_MEASUREMENT_ENABLE); //Disable sleep-related bits
-                                                 //and begin measurement
+                                                                                             //and begin measurement
     Delay10TCYx(1);
 }
 
-void readAxisMeasurements(void){
+AccelData readAxisMeasurements(void){
     int i;
-    unsigned char buffer[7];
-    AccelData currentData;
-
+    unsigned int q;
+    unsigned char buffer[6];
+    AccelData tempData; 
+        
     SPI_Read_Multiple(REG_ADDR_ADXL313_DATA_X0, 6, buffer);
 
-    currentData.x_axis = concatenateRawValues(buffer[1], buffer[0]);
-    currentData.y_axis = concatenateRawValues(buffer[3], buffer[2]);
-    currentData.z_axis = concatenateRawValues(buffer[5], buffer[4]);
+    tempData.y_axis = concatenateRawValues(buffer[3], buffer[2]);
+    tempData.z_axis = concatenateRawValues(buffer[5], buffer[4]);
+    tempData.x_axis = concatenateRawValues(buffer[1], buffer[0]);
 
-    addData(&currentData);
+    return tempData;
 }
 
-double computeAmplitude(AccelData *axisMeasurement){
-    double x, y, z, amplitude;
-    
-    x = digitalToAnalogMeasurement(axisMeasurement->x_axis, 2);
-    y = digitalToAnalogMeasurement(axisMeasurement->y_axis, 2);
-    z = digitalToAnalogMeasurement(axisMeasurement->z_axis, 2);
+double computeAmplitude(AccelData axisMeasurement, int measurementRange){
+    double x, y, z, amplitude, deBogue;
 
-    amplitude = z - cos(asin(y));
+    y = digitalToAnalogMeasurement(axisMeasurement.y_axis, measurementRange);
+    z = digitalToAnalogMeasurement(axisMeasurement.z_axis, measurementRange);
+    x = digitalToAnalogMeasurement(axisMeasurement.x_axis, measurementRange);
+
+    //sin(y) overflow detection
+    if(y >= 1){
+        y = 0.99;
+    } else if(y <= -1){
+        y = -0.99;
+    }
+
+    amplitude = fabs(z - cos(asin(y)));
 
     return amplitude;
 }
@@ -64,67 +72,62 @@ double digitalToAnalogMeasurement(unsigned int digitalInput, int measurementRang
     //Range Code:  '0' => 0.5g; '1' => 1.0g; '2' => 2.0g
     //Assumes Full-Resolution Enabled
     //Output unit = milli-G's
-    unsigned int magnitude;
+    int digitalIntermediate, magnitude;
     double convertedVal;
-    unsigned int sign = (digitalInput >> 11) % 2;
+    unsigned int sign;
 
+    sign = (digitalInput >> 11) % 2;
     convertedVal = 0;
 
     switch(measurementRange){
-        case 0:
-            magnitude = (digitalInput & 0x01FF);
-
-            if(sign){
-                magnitude = ~magnitude + 1;
-            }
-
-            magnitude = (magnitude & 0x01FF);
-
+        case ADXL313_HALF_G_RANGE:
+            digitalIntermediate = digitalInput & 0x01FF;
+            magnitude = sign ? (~digitalIntermediate + 1) : digitalIntermediate;
+            magnitude = magnitude & 0x01FF;
             break;
-        case 1:
-            magnitude = (digitalInput & 0x03FF);
-
-            if(sign){
-                magnitude = ~magnitude + 1;
-            }
-
-            magnitude = (magnitude & 0x03FF);
-
+            
+        case ADXL313_ONE_G_RANGE:
+            digitalIntermediate = digitalInput & 0x03FF;
+            magnitude = sign ? (~digitalIntermediate + 1) : digitalIntermediate;
+            magnitude = magnitude & 0x03FF;
             break;
-        case 2:
-            magnitude = (digitalInput & 0x07FF);
-
-            if(sign){
-                magnitude = ~magnitude + 1;
-            }
-
-            magnitude = (magnitude & 0x07FF);
-
+            
+        case ADXL313_TWO_G_RANGE:
+            digitalIntermediate = digitalInput & 0x07FF;
+            magnitude = sign ? (~digitalIntermediate + 1) : digitalIntermediate;
+            magnitude = magnitude & 0x07FF;
             break;
     }
 
     convertedVal += magnitude;
 
-    convertedVal *= (double) 1000;
     convertedVal /= (double) 1024;
 
     convertedVal = sign ? -convertedVal : convertedVal;
-
     return convertedVal;
 }
 
 unsigned int concatenateRawValues(unsigned char upperBits, unsigned char lowerBits){
     unsigned int upperTemp;
     unsigned int concatenatedValue;
-
-    concatenatedValue = (unsigned int) lowerBits;
-    upperTemp = (unsigned int) (upperBits);
-
-    concatenatedValue = (upperTemp << 8) | concatenatedValue;
+    
+    concatenatedValue = 0;
+    concatenatedValue += upperBits;
+    concatenatedValue = concatenatedValue << 8;
+    concatenatedValue += lowerBits;
 
     return concatenatedValue;
 }
 
+void measurementGracePeriod(int numSeconds, int measurementRange){
+    int i, numSamples;
+    
+    numSamples = numSeconds*MEASUREMENT_SAMPLE_RATE;
+    
+    for(i = 0; i < numSamples; i++){
+        addDataAccel(computeAmplitude(readAxisMeasurements(), measurementRange));
+    }
+}
 
 
 

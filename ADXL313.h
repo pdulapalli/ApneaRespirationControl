@@ -3,7 +3,7 @@
  * Author: Praveenanurag Dulapalli
  *
  * Created: 10/02/2015
- * Last Modified: 10/29/2015
+ * Last Modified: 11/09/2015
  */
 
 #ifndef ADXL313_H
@@ -106,16 +106,19 @@ extern "C" {
 //Bandwidths and Rate Parameters
 #define ADXL313_DATA_RATE_1600_HZ           0x0E
 #define ADXL313_DATA_RATE_800_HZ            0x0D
+    
+//Additional parameters
+#define ACCEL_TOLERANCE_MG  100
 
 
 void initializeADXL313(void);
 void writeRegisterControlBits(unsigned char regAddr, unsigned char regControlBits);
 void updateRegisterControlBits(unsigned char regAddr);
-void readAxisMeasurements(void);
+AccelData readAxisMeasurements(void);
+double computeAmplitude(AccelData axisMeasurement, int measurementRange); //Perform calculation to obtain amplitude of displacement
 double digitalToAnalogMeasurement(unsigned int digitalInput, int measurementRange);
 unsigned int concatenateRawValues(unsigned char upperBits, unsigned char lowerBits);
-double computeAmplitude(AccelData *axisMeasurement); //Perform calculation to obtain amplitude of displacement
-
+void measurementGracePeriod(int numSeconds, int measurementRange);
 
 #ifdef	__cplusplus
 }
