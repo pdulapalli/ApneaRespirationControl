@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Lcd.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/DataManager.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/SPIComLink.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/main.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ADXL313.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ApneaMonitor.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Globals.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/AuxLCD.c
+SOURCEFILES_QUOTED_IF_SPACED=/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Lcd.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/DataManager.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/SPIComLink.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/main.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ADXL313.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ApneaMonitor.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Globals.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/AuxLCD.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/PWMOut.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/591047608/Lcd.o ${OBJECTDIR}/_ext/591047608/DataManager.o ${OBJECTDIR}/_ext/591047608/SPIComLink.o ${OBJECTDIR}/_ext/591047608/main.o ${OBJECTDIR}/_ext/591047608/ADXL313.o ${OBJECTDIR}/_ext/591047608/ApneaMonitor.o ${OBJECTDIR}/_ext/591047608/Globals.o ${OBJECTDIR}/_ext/591047608/AuxLCD.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/591047608/Lcd.o.d ${OBJECTDIR}/_ext/591047608/DataManager.o.d ${OBJECTDIR}/_ext/591047608/SPIComLink.o.d ${OBJECTDIR}/_ext/591047608/main.o.d ${OBJECTDIR}/_ext/591047608/ADXL313.o.d ${OBJECTDIR}/_ext/591047608/ApneaMonitor.o.d ${OBJECTDIR}/_ext/591047608/Globals.o.d ${OBJECTDIR}/_ext/591047608/AuxLCD.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/591047608/Lcd.o ${OBJECTDIR}/_ext/591047608/DataManager.o ${OBJECTDIR}/_ext/591047608/SPIComLink.o ${OBJECTDIR}/_ext/591047608/main.o ${OBJECTDIR}/_ext/591047608/ADXL313.o ${OBJECTDIR}/_ext/591047608/ApneaMonitor.o ${OBJECTDIR}/_ext/591047608/Globals.o ${OBJECTDIR}/_ext/591047608/AuxLCD.o ${OBJECTDIR}/_ext/591047608/PWMOut.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/591047608/Lcd.o.d ${OBJECTDIR}/_ext/591047608/DataManager.o.d ${OBJECTDIR}/_ext/591047608/SPIComLink.o.d ${OBJECTDIR}/_ext/591047608/main.o.d ${OBJECTDIR}/_ext/591047608/ADXL313.o.d ${OBJECTDIR}/_ext/591047608/ApneaMonitor.o.d ${OBJECTDIR}/_ext/591047608/Globals.o.d ${OBJECTDIR}/_ext/591047608/AuxLCD.o.d ${OBJECTDIR}/_ext/591047608/PWMOut.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/591047608/Lcd.o ${OBJECTDIR}/_ext/591047608/DataManager.o ${OBJECTDIR}/_ext/591047608/SPIComLink.o ${OBJECTDIR}/_ext/591047608/main.o ${OBJECTDIR}/_ext/591047608/ADXL313.o ${OBJECTDIR}/_ext/591047608/ApneaMonitor.o ${OBJECTDIR}/_ext/591047608/Globals.o ${OBJECTDIR}/_ext/591047608/AuxLCD.o
+OBJECTFILES=${OBJECTDIR}/_ext/591047608/Lcd.o ${OBJECTDIR}/_ext/591047608/DataManager.o ${OBJECTDIR}/_ext/591047608/SPIComLink.o ${OBJECTDIR}/_ext/591047608/main.o ${OBJECTDIR}/_ext/591047608/ADXL313.o ${OBJECTDIR}/_ext/591047608/ApneaMonitor.o ${OBJECTDIR}/_ext/591047608/Globals.o ${OBJECTDIR}/_ext/591047608/AuxLCD.o ${OBJECTDIR}/_ext/591047608/PWMOut.o
 
 # Source Files
-SOURCEFILES=/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Lcd.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/DataManager.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/SPIComLink.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/main.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ADXL313.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ApneaMonitor.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Globals.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/AuxLCD.c
+SOURCEFILES=/Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Lcd.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/DataManager.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/SPIComLink.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/main.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ADXL313.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/ApneaMonitor.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Globals.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/AuxLCD.c /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/PWMOut.c
 
 
 CFLAGS=
@@ -153,6 +153,14 @@ ${OBJECTDIR}/_ext/591047608/AuxLCD.o: /Users/pdulapalli/Documents/Duke/Fall_2015
 	@${DEP_GEN} -d ${OBJECTDIR}/_ext/591047608/AuxLCD.o 
 	@${FIXDEPS} "${OBJECTDIR}/_ext/591047608/AuxLCD.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
+${OBJECTDIR}/_ext/591047608/PWMOut.o: /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/PWMOut.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/591047608" 
+	@${RM} ${OBJECTDIR}/_ext/591047608/PWMOut.o.d 
+	@${RM} ${OBJECTDIR}/_ext/591047608/PWMOut.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/591047608/PWMOut.o   /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/PWMOut.c 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/591047608/PWMOut.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/591047608/PWMOut.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
 else
 ${OBJECTDIR}/_ext/591047608/Lcd.o: /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/Lcd.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/591047608" 
@@ -217,6 +225,14 @@ ${OBJECTDIR}/_ext/591047608/AuxLCD.o: /Users/pdulapalli/Documents/Duke/Fall_2015
 	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/591047608/AuxLCD.o   /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/AuxLCD.c 
 	@${DEP_GEN} -d ${OBJECTDIR}/_ext/591047608/AuxLCD.o 
 	@${FIXDEPS} "${OBJECTDIR}/_ext/591047608/AuxLCD.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
+${OBJECTDIR}/_ext/591047608/PWMOut.o: /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/PWMOut.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/591047608" 
+	@${RM} ${OBJECTDIR}/_ext/591047608/PWMOut.o.d 
+	@${RM} ${OBJECTDIR}/_ext/591047608/PWMOut.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -ms -oa-  -I ${MP_CC_DIR}/../h  -fo ${OBJECTDIR}/_ext/591047608/PWMOut.o   /Users/pdulapalli/Documents/Duke/Fall_2015/BME_464/Project/Apnea_Respiration_Control/ApneaRespirationControl-Software/PWMOut.c 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/591047608/PWMOut.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/591047608/PWMOut.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
 endif
 

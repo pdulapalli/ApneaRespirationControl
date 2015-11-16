@@ -31,11 +31,17 @@ extern "C" {
 #define APNEA_STIMULATION_DURATION              3 //time(sec) required to stimulate
 #define MEASUREMENT_STALL_DURATION              1 //time(sec) to stall before meaningful measurement
 #define APNEA_STIMULATION_RECOVERY_DURATION    20 //time(sec) to wait before checking for apnea after stimulus
+#define FAILURE_STATE_CRITERION_DURATION       10 //time(sec) after which declare failure state 
 #define STIMULUS_PIN                          LATEbits.LATE1         
 #define STIMULUS_HIGH_MICROS                  300
-#define STIMULUS_LOW_MICROS                 19700         
+#define STIMULUS_LOW_MICROS                 19700
+
+#define IS_NORMAL_RESP                      0x0    
+#define IS_APNEA                            0x1
+#define IS_ERROR                            0x2
     
-int isApneaCondition(void); //Determine if patient has entered apnea state
+    
+int checkApneaCondition(void); //Determine if patient has entered apnea state
 void sendStimulus(void); //Set designated I/O pin HIGH to activate stimulus
 void delayOneSamplePeriod(void); //Performs calculation to space measurements with appropriate sample period
 void addToReferenceCalc(struct Data_Node *dataPoint);

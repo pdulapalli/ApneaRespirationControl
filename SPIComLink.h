@@ -45,8 +45,8 @@ extern "C" {
 //MSSP Status Registers
 #define SPI_CSN     LATAbits.LATA5
 #define SPI_SCK     LATCbits.LATC3
-#define SPI_MISO    PORTCbits.SDI1
-#define SPI_MOSI    LATCbits.LATC4
+#define SPI_MISO    PORTCbits.RC4
+#define SPI_MOSI    LATCbits.LATC5
 
 void initializeSPI(void);
 void SPI_Write(unsigned char address, unsigned char data);

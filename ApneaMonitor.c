@@ -3,26 +3,35 @@
 //NOTE: Units for acceleration in this file are in milli-G's
 
 double breathingDisplacementReference = 0;
+char mostRecentCondition = 0;
 double refCount = 0;
 double delayCount = 0;
 char measurementReady = 1;
 
-int isApneaCondition(void){
-    unsigned int i, isApnea;
+int checkApneaCondition(void){
+    unsigned int i, current_condition;
     struct Data_Node *currentPoint = sensor_measure_buffer;
-    isApnea = TRUE;
+    current_condition = IS_APNEA;
     
     if(referenceExists){
         for(i = 0; i < BUFFER_LENGTH; i++){
             if(currentPoint->respDisplacement >= breathingDisplacementReference){
-                isApnea = FALSE;
+                current_condition = IS_NORMAL_RESP;
             }
             currentPoint = currentPoint->next;
         }
-        return isApnea;
+        if(current_condition == IS_APNEA && mostRecentCondition == IS_APNEA){
+            current_condition = IS_ERROR;
+        }
+           
+        mostRecentCondition = current_condition;
+        
+        return current_condition;
         
     } else{
-        return FALSE;
+        mostRecentCondition = IS_NORMAL_RESP;
+        
+        return IS_NORMAL_RESP;
     }
 }
 
@@ -66,7 +75,7 @@ void sendStimulus(void){
         delay_nops(NOP_PER_19700_US);
     }
     
-    measurementReady = FALSE;
+    //measurementReady = FALSE;
 }
 
 void delayOneSamplePeriod(void){

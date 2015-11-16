@@ -52,18 +52,16 @@ AccelData readAxisMeasurements(void){
 double computeAmplitude(AccelData axisMeasurement, int measurementRange){
     double x, y, z, amplitude, deBogue;
 
-    y = digitalToAnalogMeasurement(axisMeasurement.y_axis, measurementRange);
-    z = digitalToAnalogMeasurement(axisMeasurement.z_axis, measurementRange);
-    x = digitalToAnalogMeasurement(axisMeasurement.x_axis, measurementRange);
+    y = fabs(digitalToAnalogMeasurement(axisMeasurement.y_axis, measurementRange));
+    z = fabs(digitalToAnalogMeasurement(axisMeasurement.z_axis, measurementRange));
+    x = fabs(digitalToAnalogMeasurement(axisMeasurement.x_axis, measurementRange));
 
     //sin(y) overflow detection
     if(y >= 1){
         y = 0.99;
-    } else if(y <= -1){
-        y = -0.99;
     }
 
-    amplitude = fabs(z - cos(asin(y)));
+    amplitude = fabs( z - fabs( cos(asin(y)) )  );
 
     return amplitude;
 }
@@ -126,6 +124,15 @@ void measurementGracePeriod(int numSeconds, int measurementRange){
     
     for(i = 0; i < numSamples; i++){
         addDataAccel(computeAmplitude(readAxisMeasurements(), measurementRange));
+        LCDClear();
+        LCDGoto(0, 0);
+        LCDWriteStr("Idle...");
+        
+        LATEbits.LATE1 = HIGH;
+        LATEbits.LATE0 = HIGH;
+        delayOneSamplePeriod();
+        LATEbits.LATE1 = LOW;
+        LATEbits.LATE0 = LOW;
     }
 }
 

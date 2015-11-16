@@ -11,7 +11,9 @@
 #include <stdlib.h>
 #include <delays.h>
 #include <string.h>
+#include <timers.h>
 #include <math.h>
+//#include <pwm.h>
 
 #include "Globals.h"        //Contains shared variables, constants, and functions
 #include "Lcd.h"            //Functions for LCD use
@@ -20,10 +22,16 @@
 #include "DataManager.h"    //Manage access, updating, and organization of data via circular buffer
 #include "ApneaMonitor.h"   //Amplitude detection to alert if user in apnea condition
 #include "ADXL313.h"        //ADLX313 functions, register definitions, and bit configurations
+//#include "PWMOut.h"
 
 #pragma config FOSC = INTIO7   // Internal OSC block, Port Function on RA6/7
 #pragma config WDTEN = OFF     // Watch Dog Timer disabled
 #pragma config XINST = OFF     // Disable extended instruction set (increase stack frame)
+
+#pragma config PLLCFG = OFF
+#pragma config BOREN = OFF
+#pragma config MCLRE = EXTMCLR
+#pragma config LVP = OFF
 
 /*-----STATE MACHINE CONDITIONS-----*/
 
@@ -51,18 +59,17 @@ unsigned int current_state; //Tracking variable to manage what device's current 
     */
 
 void initializeSystems(void);
-void initalizePWM(double dutyCycle, double Tosc, double FreqPWM, double prescaleFactor);
-void writePWM(double outputValue, double outputRange, double Tosc, double prescaleFactor);
 void measureAndDisplay(void);
 
 void initializePIC(void){
+    
     //Set up 8 MHz internal oscillator
     OSCCONbits.IDLEN = 0;
     OSCCONbits.IRCF = 110; //111(16 MHz); 110(8 MHz); 100(2 MHz)
     OSCCONbits.OSTS = 0;
     OSCCONbits.HFIOFS = 1;
     OSCCONbits.SCS = 10;
-
+    
     //Set up LCD
     ANSELD = 0x00;
     TRISD = 0x00; //Digital out
@@ -73,6 +80,10 @@ void initializePIC(void){
     //Activate stimulation pin
     TRISEbits.TRISE1 = OUTPUT;
     LATEbits.LATE1 = LOW;
+    
+    TRISEbits.TRISE0 = OUTPUT;
+    LATEbits.LATE0 = LOW;
+    
 }
 
 void main() {
@@ -82,23 +93,33 @@ void main() {
     AccelData currentAxes;
     struct Data_Node *currentDataPoint;
     double currentMeas, displacement, doubletemp, q;
+
     i = 0;
     displacement = 0;
     current_state = STATE_INITIALIZE;
 
-    while(testWaveform[i] != 9001){
+    while(1){
         //BEGIN State Machine
         switch(current_state){
             case STATE_IDLE:
+                while(1){
+                    LATEbits.LATE0 = HIGH;
+                    delayOneSamplePeriod();
+                    LATEbits.LATE0 = LOW;
+                    Delay10TCYx(0);
+                }
                 break;
 
             case STATE_INITIALIZE:
                 initializeSystems();
 
                 //Grace period to prime ADXL before recording measurements
+                //LCDClear();
+                //LCDGoto(0, 0);
+                //LCDWriteStr("Idle..");
                 measurementGracePeriod(12, ADXL313_TWO_G_RANGE);
 
-                current_state = STATE_IDLE;
+                current_state = STATE_MEASURE;
                 break;
 
             case STATE_MEASURE:
@@ -109,17 +130,6 @@ void main() {
 
             case STATE_CALCULATE:
                 displacement = computeAmplitude(currentAxes, ADXL313_TWO_G_RANGE);
-
-                current_state = STATE_ERROR_CHECK;
-                break;
-
-            case STATE_ERROR_CHECK:
-                LCDGoto(0, 0);
-                printDouble(1000*displacement, 3);
-
-                LCDGoto(0, 1);
-                q = digitalToAnalogMeasurement(currentAxes.z_axis, 2);
-                printDouble(1000*q, 3);
 
                 current_state = STATE_UPDATE_DATA;
                 break;
@@ -135,17 +145,52 @@ void main() {
                 break;
 
             case STATE_APNEA_DETECTION:
-                apneaBoolean = isApneaCondition();
+                apneaBoolean = checkApneaCondition();
+
+                current_state = STATE_ERROR_CHECK;
+                break;
+                
+            case STATE_ERROR_CHECK:
+                LCDGoto(0, 0);
+                printDouble(1000*displacement, 3);
+                
+                LCDGoto(9, 0);
+
+                if(referenceExists){
+                    printDouble(1000*breathingDisplacementReference, 1);
+                } else{
+                    LCDWriteStr("REF");
+                }
+
+                LCDGoto(0, 1);
+                q = digitalToAnalogMeasurement(currentAxes.z_axis, 2);
+                printDouble(1000*q, 3);
+                
+                if(apneaBoolean == IS_ERROR){
+                    while(1){
+                        LATEbits.LATE0 = HIGH;
+                        Delay10TCYx(0);
+                        LATEbits.LATE0 = LOW;
+                        Delay10TCYx(0);
+                        LCDClear();
+                        LCDGoto(0, 0);
+                        LCDWriteStr(">>> ERROR >>>");
+                    }   
+                }
+                
+                //If apnea longer than expected
 
                 current_state = STATE_STIMULATE_NERVE;
                 break;
 
             case STATE_STIMULATE_NERVE:
-                if(apneaBoolean){
+                if(apneaBoolean == IS_APNEA){
                     sendStimulus();
-                    measurementGracePeriod(20, ADXL313_TWO_G_RANGE);
+                    measurementGracePeriod(10, ADXL313_TWO_G_RANGE);
+                    LCDGoto(9, 1);
+                    LCDWriteStr("STIM!");
                 }
-
+                
                 delayOneSamplePeriod();
 
                 current_state = STATE_MEASURE;
@@ -169,40 +214,7 @@ void initializeSystems(void){
     initializeCircularBuffer();
 }
 
-void initalizePWM(double dutyCycle, double Tosc, double FreqPWM, double prescaleFactor){
-    double PWMPeriod, PR2Val, CCPVal;
 
-    PWMPeriod = 1/FreqPWM;
-    PR2Val = -1 + PWMPeriod/(4*Tosc*prescaleFactor);
-
-    TRISCbits.RC2 = OUTPUT;  //RC2 = CCP1 port
-    PORTCbits.RC2 = LOW;
-
-    T2CON = 0b00000111; //[b7 = 0; b6:3 = postscaler select, b2 = timer on/off, b1:0 = prescaler select]
-                        //1 to 1 postscaler, timer2 ON, 16 prescaler
-    PR2 = 0b1111011;    //Timer2 Period Register
-                        //Calculated Value = 124
-                        //PR2 = [PWMPeriod/(4*Tosc*TMRPrescale)] - 1
-                        //CCPR1L:CCP1CON[5:4] = [DutyCycle/(Tosc*TMRPrescale)
-                        //Calculated Value = 250
-
-    CCPVal = dutyCycle/(Tosc*prescaleFactor);
-    CCPR1L = 0b00111110; //8 MSB of calculated duty cycle
-    CCP1CON = 0b00101100;//PWM mode in b5:4 = 2 LSB of calculated duty cycle
-                         //Mode select bits b3:0 = (1100) PWM Mode
-}
-
-void writePWM(double outputValue, double outputRange, double Tosc, double prescaleFactor){
-    double dutyCycle, CCPVal;
-
-    dutyCycle = outputValue/outputRange;
-    CCPVal = dutyCycle/(Tosc*prescaleFactor);
-    //TODO:
-
-    CCPR1L = 0b00111110; //8 MSB of calculated duty cycle
-    CCP1CON = 0b00101100;//PWM mode in b5:4 = 2 LSB of calculated duty cycle
-                         //Mode select bits b3:0 = (1100) PWM Mode
-}
 
 void measureAndDisplay(void){
     unsigned int i, q, debugger;

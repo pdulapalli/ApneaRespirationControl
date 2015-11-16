@@ -24,6 +24,7 @@ extern "C" {
 #include "Lcd.h" //Also includes "General.h" which we need for I/O constants
 #include "DataManager.h"
 #include "SPIComLink.h"
+#include "ApneaMonitor.h"
 
 
 #ifdef DEFINE_VARIABLES

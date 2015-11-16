@@ -44,7 +44,9 @@ extern struct Data_Node *sensor_measure_TAIL;   //Circular buffer tail pointer
 /*-----ApneaMonitor.h-----*/
 extern double breathingDisplacementReference;
 extern char referenceExists; //'1' if already have reference measurement; '0' otherwise
-extern char measurementReady; 
+extern char mostRecentCondition; //boolean to track most recent state of patient
+extern char measurementReady;
+extern int samplesSinceLastStim; //how many samples have occurred between previous stimulation
 
 void delay_nops(int numNops);
 void delay_ms(int numMillis);
