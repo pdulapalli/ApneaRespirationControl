@@ -3,7 +3,7 @@
  * Author: Praveenanurag Dulapalli
  *
  * Created: 09/26/2015
- * Last Modified: 11/14/2015
+ * Last Modified: 11/18/2015
  */
 
 #include <p18f46k22.h>
@@ -13,7 +13,7 @@
 #include <string.h>
 #include <timers.h>
 #include <math.h>
-//#include <pwm.h>
+#include <pwm.h>
 
 #include "Globals.h"        //Contains shared variables, constants, and functions
 #include "Lcd.h"            //Functions for LCD use
@@ -22,7 +22,7 @@
 #include "DataManager.h"    //Manage access, updating, and organization of data via circular buffer
 #include "ApneaMonitor.h"   //Amplitude detection to alert if user in apnea condition
 #include "ADXL313.h"        //ADLX313 functions, register definitions, and bit configurations
-//#include "PWMOut.h"
+#include "PWMOut.h"
 
 #pragma config FOSC = INTIO7   // Internal OSC block, Port Function on RA6/7
 #pragma config WDTEN = OFF     // Watch Dog Timer disabled
@@ -32,6 +32,7 @@
 #pragma config BOREN = OFF
 #pragma config MCLRE = EXTMCLR
 #pragma config LVP = OFF
+#pragma config PBADEN = OFF
 
 /*-----STATE MACHINE CONDITIONS-----*/
 
@@ -62,14 +63,14 @@ void initializeSystems(void);
 void measureAndDisplay(void);
 
 void initializePIC(void){
-    
+
     //Set up 8 MHz internal oscillator
     OSCCONbits.IDLEN = 0;
     OSCCONbits.IRCF = 110; //111(16 MHz); 110(8 MHz); 100(2 MHz)
     OSCCONbits.OSTS = 0;
     OSCCONbits.HFIOFS = 1;
     OSCCONbits.SCS = 10;
-    
+
     //Set up LCD
     ANSELD = 0x00;
     TRISD = 0x00; //Digital out
@@ -80,10 +81,10 @@ void initializePIC(void){
     //Activate stimulation pin
     TRISEbits.TRISE1 = OUTPUT;
     LATEbits.LATE1 = LOW;
-    
+
     TRISEbits.TRISE0 = OUTPUT;
     LATEbits.LATE0 = LOW;
-    
+
 }
 
 void main() {
@@ -96,28 +97,33 @@ void main() {
 
     i = 0;
     displacement = 0;
+
     current_state = STATE_INITIALIZE;
 
     while(1){
         //BEGIN State Machine
         switch(current_state){
             case STATE_IDLE:
-                while(1){
-                    LATEbits.LATE0 = HIGH;
-                    delayOneSamplePeriod();
-                    LATEbits.LATE0 = LOW;
-                    Delay10TCYx(0);
+                /*
+                for(i = 50; i > 0; i--){
+                        LCDClear();
+                        LCDGoto(0, 0);
+                        printDouble(i, 1);
+                        inttemp = convertAccelDataToDutyCycle(i, MAX_1500_MILLI_G, TIMER2_PRESCALE_16, PWM_FREQ_1_KHz, CLOCK_8_MHz);
+                        writePWM(inttemp);
+                        Delay10KTCYx(10);
                 }
+                */
                 break;
 
             case STATE_INITIALIZE:
                 initializeSystems();
 
                 //Grace period to prime ADXL before recording measurements
-                //LCDClear();
-                //LCDGoto(0, 0);
-                //LCDWriteStr("Idle..");
-                measurementGracePeriod(12, ADXL313_TWO_G_RANGE);
+                LCDClear();
+                LCDGoto(0, 0);
+                LCDWriteStr("Idle..");
+                //measurementGracePeriod(12, ADXL313_TWO_G_RANGE);
 
                 current_state = STATE_MEASURE;
                 break;
@@ -149,11 +155,12 @@ void main() {
 
                 current_state = STATE_ERROR_CHECK;
                 break;
-                
+
             case STATE_ERROR_CHECK:
+                LCDClear();
                 LCDGoto(0, 0);
                 printDouble(1000*displacement, 3);
-                
+
                 LCDGoto(9, 0);
 
                 if(referenceExists){
@@ -165,8 +172,12 @@ void main() {
                 LCDGoto(0, 1);
                 q = digitalToAnalogMeasurement(currentAxes.z_axis, 2);
                 printDouble(1000*q, 3);
-                
+
+                inttemp = convertAccelDataToDutyCycle(1000*displacement, MAX_1500_MILLI_G, TIMER2_PRESCALE_16, PWM_FREQ_1_KHz, CLOCK_8_MHz);
+                writePWM(inttemp);
+
                 if(apneaBoolean == IS_ERROR){
+                    closePWM();
                     while(1){
                         LATEbits.LATE0 = HIGH;
                         Delay10TCYx(0);
@@ -174,10 +185,10 @@ void main() {
                         Delay10TCYx(0);
                         LCDClear();
                         LCDGoto(0, 0);
-                        LCDWriteStr(">>> ERROR >>>");
-                    }   
+                        LCDWriteStr(">>>ERROR>>>");
+                    }
                 }
-                
+
                 //If apnea longer than expected
 
                 current_state = STATE_STIMULATE_NERVE;
@@ -185,12 +196,17 @@ void main() {
 
             case STATE_STIMULATE_NERVE:
                 if(apneaBoolean == IS_APNEA){
-                    sendStimulus();
-                    measurementGracePeriod(10, ADXL313_TWO_G_RANGE);
                     LCDGoto(9, 1);
-                    LCDWriteStr("STIM!");
+                    LCDWriteStr("STIM");
+                    sendStimulus();
+                    LCDClear();
+                    LCDGoto(0, 0);
+                    LCDWriteStr("Warning standby");
+                    measurementGracePeriod(10, ADXL313_TWO_G_RANGE);
+                } else if(apneaBoolean == RESET_REFERENCE){
+                    referenceReset();
                 }
-                
+
                 delayOneSamplePeriod();
 
                 current_state = STATE_MEASURE;
@@ -209,12 +225,11 @@ void main() {
 
 void initializeSystems(void){
     initializePIC();
+    initializePWM(TIMER2_PRESCALE_16, PWM_FREQ_1_KHz, CLOCK_8_MHz);
     initializeSPI();
     initializeADXL313();
     initializeCircularBuffer();
 }
-
-
 
 void measureAndDisplay(void){
     unsigned int i, q, debugger;

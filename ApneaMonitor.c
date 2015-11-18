@@ -3,7 +3,7 @@
 //NOTE: Units for acceleration in this file are in milli-G's
 
 double breathingDisplacementReference = 0;
-char mostRecentCondition = 0;
+char lastCondition = 0;
 double refCount = 0;
 double delayCount = 0;
 char measurementReady = 1;
@@ -20,16 +20,18 @@ int checkApneaCondition(void){
             }
             currentPoint = currentPoint->next;
         }
-        if(current_condition == IS_APNEA && mostRecentCondition == IS_APNEA){
+        if(current_condition == IS_APNEA && lastCondition == IS_APNEA){
             current_condition = IS_ERROR;
+        } else if(current_condition == IS_NORMAL_RESP && lastCondition == IS_APNEA){
+            current_condition = RESET_REFERENCE;
         }
            
-        mostRecentCondition = current_condition;
+        lastCondition = current_condition;
         
         return current_condition;
         
     } else{
-        mostRecentCondition = IS_NORMAL_RESP;
+        lastCondition = IS_NORMAL_RESP;
         
         return IS_NORMAL_RESP;
     }
@@ -94,5 +96,11 @@ void delayOneSamplePeriod(void){
         delay_50ms(1);
     }
 }
+
+void referenceReset(void){
+    referenceExists = FALSE;
+    refCount = 0;
+}
+
 
 

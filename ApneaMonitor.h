@@ -39,6 +39,7 @@ extern "C" {
 #define IS_NORMAL_RESP                      0x0    
 #define IS_APNEA                            0x1
 #define IS_ERROR                            0x2
+#define RESET_REFERENCE                     0x3
     
     
 int checkApneaCondition(void); //Determine if patient has entered apnea state
@@ -46,6 +47,7 @@ void sendStimulus(void); //Set designated I/O pin HIGH to activate stimulus
 void delayOneSamplePeriod(void); //Performs calculation to space measurements with appropriate sample period
 void addToReferenceCalc(struct Data_Node *dataPoint);
 int readyToMeasure(void);
+void referenceReset(void);
 
 
 #ifdef	__cplusplus

@@ -14,6 +14,8 @@ extern "C" {
 
 #include "Globals.h"
     
+#include "General.h"
+    
 #include <p18f46k22.h>
 #include <stdio.h>
 #include <math.h>
@@ -22,8 +24,15 @@ extern "C" {
 #include <pwm.h>
 #include <timers.h>
     
-void initializePWM(int prescaleFactor);
-void writePWM(double valueToWrite);
+#define CLOCK_8_MHz 8000000
+#define TIMER2_PRESCALE_16 16
+#define PWM_FREQ_1_KHz   1000   
+#define MAX_1500_MILLI_G    1500
+    
+void initializePWM(int prescaleFactor, double PWMFreq, double clockSpeed);
+void writePWM(int dutyCycleBits);
+int convertAccelDataToDutyCycle(double myValue, double maxVal, int prescaleFactor, double PWMFreq, double clockSpeed);
+void closePWM(void);
 
 #ifdef	__cplusplus
 }

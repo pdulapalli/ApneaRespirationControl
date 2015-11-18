@@ -124,9 +124,9 @@ void measurementGracePeriod(int numSeconds, int measurementRange){
     
     for(i = 0; i < numSamples; i++){
         addDataAccel(computeAmplitude(readAxisMeasurements(), measurementRange));
-        LCDClear();
-        LCDGoto(0, 0);
-        LCDWriteStr("Idle...");
+        //LCDClear();
+        //LCDGoto(0, 0);
+        //LCDWriteStr("Idle...");
         
         LATEbits.LATE1 = HIGH;
         LATEbits.LATE0 = HIGH;
