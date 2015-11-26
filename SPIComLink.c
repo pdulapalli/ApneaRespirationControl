@@ -1,11 +1,11 @@
 #include "SPIComLink.h"
 
 void initializeSPI(void){
-    TRISAbits.TRISA5 = OUTPUT;
-    TRISCbits.TRISC3 = OUTPUT;    //SCK
-    TRISCbits.TRISC4 = INPUT;     //MISO
-    TRISCbits.TRISC5 = OUTPUT;    //MOSI
-    ANSELCbits.ANSC4 = CLEAR;
+    TRISAbits.TRISA5 = OUTPUT;    //CSN  (CHIP SELECT)
+    TRISCbits.TRISC3 = OUTPUT;    //SCK  (CLOCK)
+    TRISCbits.TRISC4 = INPUT;     //MISO (ADXL SDO)
+    TRISCbits.TRISC5 = OUTPUT;    //MOSI (ADXL SDI)
+    ANSELCbits.ANSC4 = CLEAR;     //Ensure Pin RC4 accepts digital inputs
 
     /** Start SPI in Mode 1 (polarity), 1 (phase) **/
 
@@ -13,16 +13,16 @@ void initializeSPI(void){
     SSP1STAT = SPI_SMP_END | SPI_CKE_TRANSMIT_FROM_IDLE;
 
     //SSP1EN = 1, CKP (polarity) = 1
-    SSPCON1 = 0x30;
+    SSPCON1 = SPI_MODE_11;
 
     LATAbits.LATA5 = HIGH; //Disable Chip Select
 
 }
 
 void SPI_Write(unsigned char address, unsigned char data){
-    unsigned char dummyRead;
+    unsigned char dummyRead; //Vessel used to clear SPI buffer
 
-    // Activate the SS SPI Select pin
+    //Activate Chip Select
     LATAbits.LATA5 = LOW;
 
     // Start Register Address transmission
@@ -43,14 +43,14 @@ void SPI_Write(unsigned char address, unsigned char data){
     //Read dummy data from SSP Buffer
     dummyRead = SSPBUF;
 
-    // CS pin is not active
+    //Deactivate Chip Select
     LATAbits.LATA5 = HIGH;
 }
 
 unsigned char SPI_Read(unsigned char address){
     unsigned char readValue, dummyRead;
 
-    // Activate the SS SPI Select pin
+    //Activate Chip Select
     LATAbits.LATA5 = LOW;
 
     // Start Address transmission
@@ -63,9 +63,9 @@ unsigned char SPI_Read(unsigned char address){
     dummyRead = SSPBUF;
 
     // Send Dummy transmission for reading the data
-    SSPBUF = 0x00;
+    SSPBUF = DUMMY_DATA;
 
-    // Wait for Data Transmit/Receipt complete
+    // Wait for Data Transmission/Reception to complete
     while(!SSPSTATbits.BF){
         dummyRead = SSPBUF;
     }
@@ -73,7 +73,7 @@ unsigned char SPI_Read(unsigned char address){
     //Read data input from SSPBUF for MISO signal
     readValue = SSPBUF;
 
-    // CS pin is not active
+    //Deactivate Chip Select
     LATAbits.LATA5 = HIGH;
 
     return(readValue);
@@ -81,9 +81,10 @@ unsigned char SPI_Read(unsigned char address){
 
 unsigned char *SPI_Read_Multiple(unsigned char start_address, int numBytesToRead, unsigned char byteData[]){
     unsigned char dummyRead;
+    unsigned char *readValues;
     int i;
 
-    // Activate the SS SPI Select pin
+    //Activate Chip Select
     LATAbits.LATA5 = LOW;
 
     /*---Must select first register to read --*/
@@ -91,18 +92,19 @@ unsigned char *SPI_Read_Multiple(unsigned char start_address, int numBytesToRead
     // Start Address transmission
     SSPBUF = READ_ENABLE | MULTIPLE_BYTE_ENABLE | start_address;
 
-    // Wait for Data Transmit/Receipt complete
+    // Wait for Data Transmission/Reception to complete
     while(!SSPSTATbits.BF);
 
 
     //Read dummy data from SSP Buffer
     dummyRead = SSPBUF;
 
+    //Continue to send series of clock pulses until all necessary bytes are read
     for(i = 0; i < numBytesToRead; i++){
         //Note: approximate delay between each pair of transmissions = 118 us
 
         // Send Dummy transmission for reading the data
-        SSPBUF = 0x00;
+        SSPBUF = DUMMY_DATA;
 
         // Wait for Data Transmit/Receipt complete
         while(!SSPSTATbits.BF){
@@ -113,9 +115,11 @@ unsigned char *SPI_Read_Multiple(unsigned char start_address, int numBytesToRead
         byteData[i] = SSPBUF;
     }
 
-    // CS pin is not active
+    //Deactivate Chip Select
     LATAbits.LATA5 = HIGH;
 
-    return(byteData);
+    readValues = &byteData[0];
+
+    return(readValues);
 }
 

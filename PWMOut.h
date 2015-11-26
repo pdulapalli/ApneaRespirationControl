@@ -1,8 +1,9 @@
-/* 
+/*
  * File:   PWMOut.h
- * Author: pdulapalli
+ * Author: Praveenanurag Dulapalli
  *
- * Created on November 16, 2015, 11:14 AM
+ * Created: 11/16/2015
+ * Last Modified: 11/22/2015
  */
 
 #ifndef PWMOUT_H
@@ -13,9 +14,9 @@ extern "C" {
 #endif
 
 #include "Globals.h"
-    
+
 #include "General.h"
-    
+
 #include <p18f46k22.h>
 #include <stdio.h>
 #include <math.h>
@@ -23,15 +24,48 @@ extern "C" {
 #include <delays.h>
 #include <pwm.h>
 #include <timers.h>
-    
-#define CLOCK_8_MHz 8000000
-#define TIMER2_PRESCALE_16 16
-#define PWM_FREQ_1_KHz   1000   
-#define MAX_1500_MILLI_G    1500
-    
+
+#define CLOCK_8_MHz 8000000 //8 MHz Clock Speed
+#define TIMER2_PRESCALE_16 16 //Prescale factor of 16 for Timer2 speed division
+#define PWM_FREQ_1_KHz   1000 //1 KHz PWM carrier frequency
+#define MAX_1500_MILLI_G  1500 //1500 mG corresponding to 100% duty cycle
+
+/**
+*Function Name: initializePWM
+*Parameters:    [1] int prescaleFactor: factor to scale PWM clock speed
+                [2] double PWMFreq: PWM carrier frequency
+                [3] double clockSpeed: PWM clock speed setting
+*Output:        None
+*Purpose:       Activate registers and I/O pins associated with PWM (CCP5)
+**/
 void initializePWM(int prescaleFactor, double PWMFreq, double clockSpeed);
-void writePWM(int dutyCycleBits);
+
+/**
+*Function Name: writePWM
+*Parameters:    unsigned int dutyCycleBits: bit sequence value representing duty cycle
+*Output:        None
+*Purpose:       Output a PWM pulse with the specified duty cycle setting
+**/
+void writePWM(unsigned int dutyCycleBits);
+
+/**
+*Function Name: convertAccelDataToDutyCycle
+*Parameters:    [1] double myValue: original accelerometer respiration displacement measurement
+                [2] double maxVal: maximum expected measurement (normalization factor)
+                [3] int prescaleFactor: factor to scale PWM clock speed
+                [4] double PWMFreq: PWM carrier frequency
+                [5] double clockSpeed: PWM clock speed setting
+*Output:        None
+*Purpose:       Compute a duty cycle and convert it to appropriate bit sequence from original data
+**/
 int convertAccelDataToDutyCycle(double myValue, double maxVal, int prescaleFactor, double PWMFreq, double clockSpeed);
+
+/**
+*Function Name: closePWM
+*Parameters:    None
+*Output:        None
+*Purpose:       Deactivate CCP module--reset registers and associated PWM pins
+**/
 void closePWM(void);
 
 #ifdef	__cplusplus

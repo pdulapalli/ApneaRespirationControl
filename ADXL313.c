@@ -26,7 +26,7 @@ void initializeADXL313(void){
     SPI_Write(REG_ADDR_ADXL313_INT_ENABLE, ADXL313_DISABLE_ALL_INTERRUPTS); //DISABLE_INTERRUPTS
     Delay10TCYx(1);
 
-    SPI_Write(REG_ADDR_ADXL313_DATA_FORMAT, 0x0A); //Configure data output
+    SPI_Write(REG_ADDR_ADXL313_DATA_FORMAT, ADXL313_USE_FULL_RES | ADXL313_TWO_G_RANGE); //Configure data output
     Delay10TCYx(1);
 
     SPI_Write(REG_ADDR_ADXL313_POWER_CTL, ADXL313_DISABLE_I2C | ADXL313_MEASUREMENT_ENABLE); //Disable sleep-related bits
@@ -35,18 +35,16 @@ void initializeADXL313(void){
 }
 
 AccelData readAxisMeasurements(void){
-    int i;
-    unsigned int q;
     unsigned char buffer[6];
-    AccelData tempData; 
-        
+    AccelData currData;
+
     SPI_Read_Multiple(REG_ADDR_ADXL313_DATA_X0, 6, buffer);
 
-    tempData.y_axis = concatenateRawValues(buffer[3], buffer[2]);
-    tempData.z_axis = concatenateRawValues(buffer[5], buffer[4]);
-    tempData.x_axis = concatenateRawValues(buffer[1], buffer[0]);
+    currData.y_axis = concatenateRawValues(buffer[3], buffer[2]);
+    currData.z_axis = concatenateRawValues(buffer[5], buffer[4]);
+    currData.x_axis = concatenateRawValues(buffer[1], buffer[0]);
 
-    return tempData;
+    return currData;
 }
 
 double computeAmplitude(AccelData axisMeasurement, int measurementRange){
@@ -56,13 +54,13 @@ double computeAmplitude(AccelData axisMeasurement, int measurementRange){
     z = fabs(digitalToAnalogMeasurement(axisMeasurement.z_axis, measurementRange));
     x = fabs(digitalToAnalogMeasurement(axisMeasurement.x_axis, measurementRange));
 
-    //sin(y) overflow detection
+    //sin(y) overflow correction
     if(y >= 1){
         y = 0.99;
     }
 
-    amplitude = fabs( z - fabs( cos(asin(y)) )  );
-
+    amplitude = fabs( z - fabs( cos( asin(y) ) )  ); //Trigonometric expression to calculate amplitude
+                                                     //and maintain operation even with changes in y-axis
     return amplitude;
 }
 
@@ -70,6 +68,7 @@ double digitalToAnalogMeasurement(unsigned int digitalInput, int measurementRang
     //Range Code:  '0' => 0.5g; '1' => 1.0g; '2' => 2.0g
     //Assumes Full-Resolution Enabled
     //Output unit = milli-G's
+
     int digitalIntermediate, magnitude;
     double convertedVal;
     unsigned int sign;
@@ -77,39 +76,44 @@ double digitalToAnalogMeasurement(unsigned int digitalInput, int measurementRang
     sign = (digitalInput >> 11) % 2;
     convertedVal = 0;
 
+    //Mask measurement bits according to bits occupied by measurement range
+    //0.5g = 10 bits, 1.0g = 11 bits, 2.0g = 12 bits
+
     switch(measurementRange){
         case ADXL313_HALF_G_RANGE:
-            digitalIntermediate = digitalInput & 0x01FF;
+            digitalIntermediate = digitalInput & MASK_9_BITS;
             magnitude = sign ? (~digitalIntermediate + 1) : digitalIntermediate;
-            magnitude = magnitude & 0x01FF;
+            magnitude = magnitude & MASK_9_BITS;
             break;
-            
+
         case ADXL313_ONE_G_RANGE:
-            digitalIntermediate = digitalInput & 0x03FF;
+            digitalIntermediate = digitalInput & MASK_10_BITS;
             magnitude = sign ? (~digitalIntermediate + 1) : digitalIntermediate;
-            magnitude = magnitude & 0x03FF;
+            magnitude = magnitude & MASK_10_BITS;
             break;
-            
+
         case ADXL313_TWO_G_RANGE:
-            digitalIntermediate = digitalInput & 0x07FF;
+            digitalIntermediate = digitalInput & MASK_11_BITS;
             magnitude = sign ? (~digitalIntermediate + 1) : digitalIntermediate;
-            magnitude = magnitude & 0x07FF;
+            magnitude = magnitude & MASK_11_BITS;
             break;
     }
 
     convertedVal += magnitude;
 
-    convertedVal /= (double) 1024;
+    convertedVal /= (double) LSB_PER_G; //Conversion from digital value to analog value
 
-    convertedVal = sign ? -convertedVal : convertedVal;
+    convertedVal = sign ? -convertedVal : convertedVal; //Apply correct sign
+
     return convertedVal;
 }
 
 unsigned int concatenateRawValues(unsigned char upperBits, unsigned char lowerBits){
-    unsigned int upperTemp;
     unsigned int concatenatedValue;
-    
+
     concatenatedValue = 0;
+
+    //Simple bit-shifting and adding
     concatenatedValue += upperBits;
     concatenatedValue = concatenatedValue << 8;
     concatenatedValue += lowerBits;
@@ -119,20 +123,12 @@ unsigned int concatenateRawValues(unsigned char upperBits, unsigned char lowerBi
 
 void measurementGracePeriod(int numSeconds, int measurementRange){
     int i, numSamples;
-    
+
     numSamples = numSeconds*MEASUREMENT_SAMPLE_RATE;
-    
+
     for(i = 0; i < numSamples; i++){
-        addDataAccel(computeAmplitude(readAxisMeasurements(), measurementRange));
-        //LCDClear();
-        //LCDGoto(0, 0);
-        //LCDWriteStr("Idle...");
-        
-        LATEbits.LATE1 = HIGH;
-        LATEbits.LATE0 = HIGH;
+        addDataAccel(computeAmplitude(readAxisMeasurements(), measurementRange)); //Perform full measurement, capture, and storage sequence
         delayOneSamplePeriod();
-        LATEbits.LATE1 = LOW;
-        LATEbits.LATE0 = LOW;
     }
 }
 

@@ -14,13 +14,13 @@ extern "C" {
 #endif
 
 #include "Globals.h"
-    
+
 #include <p18f46k22.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <delays.h>
-    
+
 #include "Lcd.h" //Also includes "General.h" which we need for I/O constants
 #include "DataManager.h"
 #include "SPIComLink.h"
@@ -33,8 +33,13 @@ extern "C" {
 #define EXTERN extern
 #endif /* DEFINE_VARIABLES */
 
-#define SIGN_BIT    1
-#define ACCEL_MASK  0xFF
+/*--------BIT OPERATION CONSTANTS--------*/
+#define SIGN_BIT        1
+#define ACCEL_MASK      0xFF
+#define LSB_PER_G       1024
+#define MASK_9_BITS     0x01FF
+#define MASK_10_BITS    0x03FF
+#define MASK_11_BITS    0x07FF
 
 /*-------------------- BEGIN REGISTER ADDRESSES ----------------*/
 
@@ -107,18 +112,65 @@ extern "C" {
 //Bandwidths and Rate Parameters
 #define ADXL313_DATA_RATE_1600_HZ           0x0E
 #define ADXL313_DATA_RATE_800_HZ            0x0D
-    
-//Additional parameters
-#define ACCEL_TOLERANCE_MG  100
 
 
+/**
+*Function Name: initializeADXL313
+*Parameters:    None
+*Output:        None
+*Purpose:       Write initialization parameters to ADXL313 registers via SPI
+**/
 void initializeADXL313(void);
-void writeRegisterControlBits(unsigned char regAddr, unsigned char regControlBits);
-void updateRegisterControlBits(unsigned char regAddr);
+
+/**
+*Function Name: readAxisMeasurements
+*Parameters:    None
+*Output:        AccelData currData: structure with three 16-bit integers corresponding to
+                                    acceleration measurements on each axis obtained directly
+                                    from ADXL313 registers
+*Purpose:       Capture and store acceleration measurements from ADXL313 registers
+**/
 AccelData readAxisMeasurements(void);
-double computeAmplitude(AccelData axisMeasurement, int measurementRange); //Perform calculation to obtain amplitude of displacement
+
+/**
+*Function Name: computeAmplitude
+*Parameters:    [1] AccelData axisMeasurement: structure with three 16-bit integers corresponding
+                                               to acceleration measurements on each axis obtained
+                                               directly from ADXL313 registers
+                [2] int measurementRange: choose which ADXL313 measurement range in (G's) to use
+*Output:        double amplitude: calculated respiration acceleration amplitude
+*Purpose:       Calculates respiration acceleration amplitude using the equation
+                => A = |z - |cos(arcsin(y))||, where z and y correspond to their respective axes
+**/
+double computeAmplitude(AccelData axisMeasurement, int measurementRange);
+
+/**
+*Function Name: digitalToAnalogMeasurement
+*Parameters:    [1] unsigned int digitalInput: sequence of bits corresponding to a digital measurement
+                [2] int measurementRange: maximum value of analog measurement
+*Output:        double convertedValue: analog value tailored to the measurement range
+*Purpose:       Convert a bit sequence into the corresponding analog value
+**/
 double digitalToAnalogMeasurement(unsigned int digitalInput, int measurementRange);
+
+/**
+*Function Name: concatenateRawValues
+*Parameters:    [1] unsigned char upperBits: contains bits 15-8 of a 16-bit number
+                [2] unsigned char lowerBits: contains bits 7-0 of a 16-bit number
+*Output:        unsigned int concatenatedValue: 16-bit integer with the upper 8 and lower
+                                                8 bits concatenated
+*Purpose:       Combine a value split across two 8-bit variables into a single 16-bit variable
+**/
 unsigned int concatenateRawValues(unsigned char upperBits, unsigned char lowerBits);
+
+/**
+*Function Name: measurementGracePeriod
+*Parameters:    [1] int numSeconds: how long to execute function
+                [2] int measurementRange: maximum value of analog measurement
+*Output:        None
+*Purpose:       Capture series of measurements to fill up data buffer and flush outdated values,
+                without performing apnea check. Needed to avoid sequential stimulation.
+**/
 void measurementGracePeriod(int numSeconds, int measurementRange);
 
 #ifdef	__cplusplus
