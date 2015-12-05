@@ -1,3 +1,11 @@
+/*
+ * File:   PWMOut.c
+ * Author: Praveenanurag Dulapalli
+ *
+ * Created: 11/16/2015
+ * Last Modified: 11/22/2015
+ */
+
 #include "PWMOut.h"
 
 void initializePWM(int prescaleFactor, double PWMFreq, double clockSpeed){

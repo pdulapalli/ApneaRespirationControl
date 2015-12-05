@@ -1,3 +1,11 @@
+/*
+ * File:   SPIComLink.c
+ * Author: Praveenanurag Dulapalli
+ *
+ * Created: 09/26/2015
+ * Last Modified: 11/26/2015
+ */
+
 #include "SPIComLink.h"
 
 void initializeSPI(void){

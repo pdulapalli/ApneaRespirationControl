@@ -1,3 +1,11 @@
+/*
+ * File:   ApneaMonitor.c
+ * Author: Praveenanurag Dulapalli
+ *
+ * Created: 09/27/2015
+ * Last Modified: 11/12/2015
+ */
+
 #include "ApneaMonitor.h"
 
 //NOTE: Units for acceleration in this file are in milli-G's

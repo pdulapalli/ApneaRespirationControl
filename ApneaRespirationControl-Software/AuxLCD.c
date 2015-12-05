@@ -1,3 +1,11 @@
+/*
+ * File:   AuxLCD.c
+ * Author: Praveenanurag Dulapalli
+ *
+ * Created: 11/09/2015
+ * Last Modified: 11/22/2015
+ */
+
 #include "AuxLCD.h"
 
 void LCDOutputString(unsigned char buffer[]){

@@ -1,3 +1,11 @@
+/*
+ * File:   DataManager.c
+ * Author: Praveenanurag Dulapalli
+ *
+ * Created: 09/27/2015
+ * Last Modified: 11/11/2015
+ */
+
 #include "DataManager.h"
 
 //Values designating buffer status

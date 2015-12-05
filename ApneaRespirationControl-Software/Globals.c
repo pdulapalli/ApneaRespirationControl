@@ -1,3 +1,11 @@
+/*
+ * File:   Globals.c
+ * Author: Praveenanurag Dulapalli
+ *
+ * Created: 10/26/2015
+ * Last Modified: 11/26/2015
+ */
+
 #include "Globals.h"
 
 void delay_nops(int numNops){
