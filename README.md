@@ -3,10 +3,10 @@ The ARC is a device intended to monitor and prevent obstructive sleep apnea that
 
 **Platform:** Microchip PIC
 
-*Testing Apparatus:* Animal respirator and Arduino Uno
+**Testing Apparatus:** Animal respirator and Arduino Uno
 
-*ApneaRespirationControl-Software:* Contains the code to control an Obstructive Sleep Apnea monitoring device
+**ApneaRespirationControl-Software:** Contains the code to control an Obstructive Sleep Apnea monitoring device
 
-*ArduinoDataCapture:* (Used for testing the device) An Arduino sketch deployed to capture real-time measurements from the ARC. Used in testing to verify that measurements acquired by the PIC microcontroller are correct.
+**ArduinoDataCapture:** (Used for testing the device) An Arduino sketch deployed to capture real-time measurements from the ARC. Used in testing to verify that measurements acquired by the PIC microcontroller are correct.
 
 Please feel free to contact me with any questions or comments you might have about the device.
