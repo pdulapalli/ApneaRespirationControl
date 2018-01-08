@@ -1,12 +1,12 @@
 /********************************************************************
 *
-*                
+*
 *
 *********************************************************************
 * FileName:        Lcd.h
 * Dependencies:    See INCLUDES section below
-* Processor: 	   PIC18F46K22      
-* Compiler: 	   C-18       
+* Processor: 	   PIC18F46K22
+* Compiler: 	   C-18
 * Company:         Microchip Technology, Inc.
 
 *
@@ -41,7 +41,7 @@
 /**
 *   @file Lcd.h
 *   @brief This file contains the function prototypes for LCD.
-*   
+*
 */
 
 #ifndef _LCD_H

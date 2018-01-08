@@ -1,23 +1,20 @@
 /**
- * File:   ADXL313.h
- * Author: Praveenanurag Dulapalli
+ *  @file ADXL313.h
+ *  @author Praveenanurag Dulapalli
+ *  @date 2015-11-09
+ *  @brief Provides register information about ADXL313 accelerometer, and
+ *  functions to access and make sense of accelerometer measurement data
  *
- * Created: 10/02/2015
- * Last Modified: 11/09/2015
- *
- * Copyright 2015 Praveenanurag Dulapalli
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ *  @copyright Copyright 2015 Praveenanurag Dulapalli
+ *  @license
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ *  use this file except in compliance with the License. You may obtain a copy of
+ *  the License at <br><br>http://www.apache.org/licenses/LICENSE-2.0<br><br>
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing permissions and limitations under
+ *  the License.}
  */
 
 #ifndef ADXL313_H
@@ -35,7 +32,7 @@ extern "C" {
 #include <stdlib.h>
 #include <delays.h>
 
-#include "Lcd.h" //Also includes "General.h" which we need for I/O constants
+#include "Lcd.h" // Also includes "General.h" which we need for I/O constants
 #include "DataManager.h"
 #include "SPIComLink.h"
 #include "ApneaMonitor.h"
@@ -57,22 +54,22 @@ extern "C" {
 
 /*-------------------- BEGIN REGISTER ADDRESSES ----------------*/
 
-//Device ID Registers
+// Device ID Registers
 #define REG_ADDR_ADXL313_DEVID_0         0x00
 #define REG_ADDR_ADXL313_DEVID_1         0x01
 #define REG_ADDR_ADXL313_PARTID          0x02
 #define REG_ADDR_ADXL313_REVID           0x03
 #define REG_ADDR_ADXL313_XID             0x04
 
-//Device Reset Register
+// Device Reset Register
 #define REG_ADDR_ADXL313_SOFT_RESET      0x18
 
-//Offset Registers
+// Offset Registers
 #define REG_ADDR_ADXL313_OFSX           0x1E
 #define REG_ADDR_ADXL313_OFSY           0x1F
 #define REG_ADDR_ADXL313_OFSZ           0x20
 
-//Threshold Registers
+// Threshold Registers
 #define REG_ADDR_ADXL313_THRESH_ACT      0x24
 #define REG_ADDR_ADXL313_TIME_INACT      0x26
 #define REG_ADDR_ADXL313_ACT_INACT_CTL   0x27
@@ -83,7 +80,7 @@ extern "C" {
 #define REG_ADDR_ADXL313_INT_MAP         0x2F
 #define REG_ADDR_ADXL313_INT_SOURCE      0x30
 
-//Data Output Registers
+// Data Output Registers
 #define REG_ADDR_ADXL313_DATA_FORMAT     0x31
 #define REG_ADDR_ADXL313_DATA_X0         0x32
 #define REG_ADDR_ADXL313_DATA_X1         0x33
@@ -92,17 +89,17 @@ extern "C" {
 #define REG_ADDR_ADXL313_DATA_Z0         0x36
 #define REG_ADDR_ADXL313_DATA_Z1         0x37
 
-//FIFO Registers
+// FIFO Registers
 #define REG_ADDR_ADXL313_FIFO_CTL        0x38
 #define REG_ADDR_ADXL313_FIFO_STATUS     0x39
 
 
 /*-------------------- Control Bits and Parameters ----------------*/
 
-//Enable Reset
+// Enable Reset
 #define ADXL313_BEGIN_SOFT_RESET    0x52
 
-//Parameters for Power Control
+// Parameters for Power Control
 #define ADXL313_DISABLE_I2C         0x40
 #define ADXL313_DEASSERT_LINK       0x00
 #define ADXL313_DISABLE_AUTO_SLEEP  0x00
@@ -110,7 +107,7 @@ extern "C" {
 #define ADXL313_STANDBY_MODE        0x00
 #define ADXL313_NO_SLEEP            0x00
 
-//Parameters for Data Format
+// Parameters for Data Format
 #define ADXL313_SELF_TEST_OFF       0x00
 #define ADXL313_SPI_4_WIRE          0x00
 #define ADXL313_USE_FULL_RES        0x08
@@ -120,71 +117,73 @@ extern "C" {
 #define ADXL313_ONE_G_RANGE         0x01
 #define ADXL313_TWO_G_RANGE         0x02
 
-//Interrupt Management
+// Interrupt Management
 #define ADXL313_DISABLE_ALL_INTERRUPTS      0x00
 
-//Bandwidths and Rate Parameters
+// Bandwidths and Rate Parameters
 #define ADXL313_DATA_RATE_1600_HZ           0x0E
 #define ADXL313_DATA_RATE_800_HZ            0x0D
 
-
 /**
-*Function Name: initializeADXL313
-*Parameters:    None
-*Output:        None
-*Purpose:       Write initialization parameters to ADXL313 registers via SPI
-**/
+ * @brief Write initialization parameters to ADXL313 registers via SPI
+ */
 void initializeADXL313(void);
 
 /**
-*Function Name: readAxisMeasurements
-*Parameters:    None
-*Output:        AccelData currData: structure with three 16-bit integers corresponding to
-                                    acceleration measurements on each axis obtained directly
-                                    from ADXL313 registers
-*Purpose:       Capture and store acceleration measurements from ADXL313 registers
-**/
+ * @brief      Capture and store acceleration measurements from ADXL313 registers
+ *
+ * @return     structure with three 16-bit integers corresponding to
+ *             acceleration measurements on each axis obtained directly from
+ *             ADXL313 registers
+ */
 AccelData readAxisMeasurements(void);
 
 /**
-*Function Name: computeAmplitude
-*Parameters:    [1] AccelData axisMeasurement: structure with three 16-bit integers corresponding
-                                               to acceleration measurements on each axis obtained
-                                               directly from ADXL313 registers
-                [2] int measurementRange: choose which ADXL313 measurement range in (G's) to use
-*Output:        double amplitude: calculated respiration acceleration amplitude
-*Purpose:       Calculates respiration acceleration amplitude using the equation
-                => A = |z - |cos(arcsin(y))||, where z and y correspond to their respective axes
-**/
+ * @brief      Calculates respiration acceleration amplitude using the equation
+ *             => A = |z - |cos(arcsin(y))||, where z and y correspond to their
+ *             respective axes
+ *
+ * @param[in]  axisMeasurement   structure with three 16-bit integers
+ *                               corresponding to acceleration measurements on
+ *                               each axis obtained directly from ADXL313
+ *                               registers
+ * @param[in]  measurementRange  choose which ADXL313 measurement range in (G's)
+ *                               to use
+ *
+ * @return     calculated respiration acceleration amplitude
+ */
 double computeAmplitude(AccelData axisMeasurement, int measurementRange);
 
 /**
-*Function Name: digitalToAnalogMeasurement
-*Parameters:    [1] unsigned int digitalInput: sequence of bits corresponding to a digital measurement
-                [2] int measurementRange: maximum value of analog measurement
-*Output:        double convertedValue: analog value tailored to the measurement range
-*Purpose:       Convert a bit sequence into the corresponding analog value
-**/
+ * @brief      Convert a bit sequence into the corresponding analog value
+ *
+ * @param[in]  digitalInput      sequence of bits corresponding to a digital
+ *                               measurement
+ * @param[in]  measurementRange  maximum value of analog measurement
+ *
+ * @return     analog value tailored to the measurement range
+ */
 double digitalToAnalogMeasurement(unsigned int digitalInput, int measurementRange);
 
 /**
-*Function Name: concatenateRawValues
-*Parameters:    [1] unsigned char upperBits: contains bits 15-8 of a 16-bit number
-                [2] unsigned char lowerBits: contains bits 7-0 of a 16-bit number
-*Output:        unsigned int concatenatedValue: 16-bit integer with the upper 8 and lower
-                                                8 bits concatenated
-*Purpose:       Combine a value split across two 8-bit variables into a single 16-bit variable
-**/
+ * @brief      Combine a value split across two 8-bit variables into a single
+ *             16-bit variable
+ *
+ * @param[in]  upperBits  contains bits 15-8 of a 16-bit number
+ * @param[in]  lowerBits  contains bits 7-0 of a 16-bit number
+ *
+ * @return     16-bit integer with the upper 8 and lower 8 bits concatenated
+ */
 unsigned int concatenateRawValues(unsigned char upperBits, unsigned char lowerBits);
 
 /**
-*Function Name: measurementGracePeriod
-*Parameters:    [1] int numSeconds: how long to execute function
-                [2] int measurementRange: maximum value of analog measurement
-*Output:        None
-*Purpose:       Capture series of measurements to fill up data buffer and flush outdated values,
-                without performing apnea check. Needed to avoid sequential stimulation.
-**/
+ * @brief      Capture series of measurements to fill up data buffer and flush
+ *             outdated values, without performing apnea check. Needed to avoid
+ *             sequential stimulation.
+ *
+ * @param[in]  numSeconds        how long to execute function
+ * @param[in]  measurementRange  maximum value of analog measurement
+ */
 void measurementGracePeriod(int numSeconds, int measurementRange);
 
 #ifdef	__cplusplus
